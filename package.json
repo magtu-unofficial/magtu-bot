@@ -24,5 +24,13 @@
     "eslint-plugin-prettier": "^3.0.1",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.1"
+  },
+  "dependencies": {
+    "botact": "^2.4.2",
+    "dotenv": "^6.2.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.4.9"
   }
 }
