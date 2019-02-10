@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "botact": "^2.4.2",
+    "dialogflow": "^0.8.0",
     "dotenv": "^6.2.0",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
