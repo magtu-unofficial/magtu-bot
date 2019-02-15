@@ -11,7 +11,9 @@ export default (timetable, subgroup) => {
     if (pair.subgroup === subgroup || pair.subgroup === "common") {
       string += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.removed) {
-        string += "пара отменена ❌";
+        string += "Пара отменена ❌";
+      } else if (pair.error) {
+        string += "Ошибка в обработке ❓";
       } else {
         string += `${pair.name} 🎓${pair.teacher} ${
           pair.classroom === "" ? "" : "🚪"

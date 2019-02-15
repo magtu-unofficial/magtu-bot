@@ -10,7 +10,9 @@ const timetable = mongoose.Schema({
       teacher: { type: String },
       classroom: { type: String },
       subgroup: { type: String, enum: ["common", "first", "second"] },
-      changed: { type: Boolean }
+      changed: { type: Boolean },
+      removed: { type: Boolean },
+      error: { type: Boolean, default: false }
     }
   ]
 });
