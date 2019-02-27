@@ -45,7 +45,34 @@ bot.on(async msg => {
         answer: result.fulfillmentText
       });
 
-      msg.reply(answer);
+      await msg.api("messages.send", {
+        peer_id: msg.peer_id,
+        message: answer,
+        dont_parse_links: 1,
+        keyboard: JSON.stringify({
+          one_time: false,
+          buttons: [
+            [
+              {
+                action: {
+                  type: "text",
+                  payload: '{"button":"1"}',
+                  label: "Расписание"
+                },
+                color: "primary"
+              },
+              {
+                action: {
+                  type: "text",
+                  payload: '{"button":"2"}',
+                  label: "Помощь"
+                },
+                color: "default"
+              }
+            ]
+          ]
+        })
+      });
     } catch (error) {
       console.log(error.message);
     }
