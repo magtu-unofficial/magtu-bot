@@ -7,8 +7,13 @@ export default (timetable, subgroup) => {
   }${subgroup === "second" ? "второй" : ""} подгруппы на ${date(
     timetable.date
   )}`;
-  for (const pair of timetable.pairs) {
-    if (pair.subgroup === subgroup || pair.subgroup === "common") {
+  for (let i = 0; i < 10; i += 1) {
+    const pair = timetable.pairs.find(e => {
+      return (
+        e.number === i && (e.subgroup === subgroup || e.subgroup === "common")
+      );
+    });
+    if (pair) {
       string += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.removed) {
         string += "Пара отменена ❌";
