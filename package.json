@@ -1,8 +1,9 @@
 {
   "name": "magtu-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Бот расписания и замен с newlms.magtu.ru",
+  "repository": "https://github.com/ivanik7/magtu-bot",
+  "main": "dist",
   "scripts": {
     "start": "node dist",
     "dev": "nodemon --ignore dist --exec babel-node src/",
@@ -10,8 +11,8 @@
     "build": "npm run test && babel src --out-dir dist"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "ivanik",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
