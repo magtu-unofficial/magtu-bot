@@ -23,6 +23,10 @@ bot.on(async msg => {
       "vk-bot-7",
       `vk-${msg.from_id}`
     );
+    msg.api("messages.setActivity", {
+      peer_id: msg.peer_id,
+      type: "typing"
+    });
 
     try {
       const request = {
