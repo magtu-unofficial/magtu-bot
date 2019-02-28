@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist",
     "dev": "nodemon --ignore dist --exec babel-node src/",
-    "test": "eslint src",
+    "test": "eslint src && jest",
     "build": "npm run test && babel src --out-dir dist"
   },
   "keywords": [],
@@ -20,8 +20,10 @@
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.1"
   },
