@@ -12,6 +12,4 @@ const emoji = [
   "🔟"
 ];
 
-export default num => {
-  return emoji[num];
-};
+export default num => emoji[num];

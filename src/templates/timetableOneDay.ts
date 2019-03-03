@@ -1,30 +1,32 @@
 import date from "./date";
 import numberToEmoji from "./numberToEmoji";
 
+const maxPairsCount = 10;
+
 export default (timetable, subgroup) => {
-  let string = `Расписание для группы ${timetable.group} ${
+  let answer = `Расписание для группы ${timetable.group} ${
     subgroup === "first" ? "первой" : ""
   }${subgroup === "second" ? "второй" : ""} подгруппы на ${date(
     timetable.date
   )}`;
-  for (let i = 0; i < 10; i += 1) {
+  for (let i = 0; i < maxPairsCount; i += 1) {
     const pair = timetable.pairs.find(e => {
       return (
         e.number === i && (e.subgroup === subgroup || e.subgroup === "common")
       );
     });
     if (pair) {
-      string += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
+      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.removed) {
-        string += "Пара отменена ❌";
+        answer += "Пара отменена ❌";
       } else if (pair.error) {
-        string += "Ошибка в обработке ❓";
+        answer += "Ошибка в обработке ❓";
       } else {
-        string += `${pair.name} 🎓${pair.teacher} ${
+        answer += `${pair.name} 🎓${pair.teacher} ${
           pair.classroom === "" ? "" : "🚪"
         }${pair.classroom}`;
       }
     }
   }
-  return string;
+  return answer;
 };

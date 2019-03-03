@@ -1,3 +1,9 @@
 {
-  "extends": ["tslint-microsoft-contrib/recommended"]
+  "extends": ["tslint-config-airbnb-base", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {
+    "no-console": { "severity": "warning" },
+    "no-magic-numbers": { "severity": "off" }
+  },
+  "rulesDirectory": []
 }
