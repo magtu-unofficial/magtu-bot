@@ -6,6 +6,7 @@ import dialogflow from "dialogflow";
 
 import { port, confirm, token } from "./utils/config";
 import router from "./router";
+import user from "./models/user";
 
 const sessionClient = new dialogflow.SessionsClient();
 
@@ -84,6 +85,13 @@ bot.on(async msg => {
 });
 
 koaRouter.post("/", bot.listen);
+
+koaRouter.get("/notify", async ctx => {
+  bot.api("messages.send", {
+    user_ids: await user.genString(),
+    message: "Были опубликованы новые замены."
+  });
+});
 
 app.use(bodyParser());
 app.use(koaRouter.routes());
