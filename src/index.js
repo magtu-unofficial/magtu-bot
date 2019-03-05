@@ -86,7 +86,7 @@ bot.on(async msg => {
 
 koaRouter.post("/", bot.listen);
 
-koaRouter.get("/notify", async ctx => {
+koaRouter.get("/notify", async () => {
   bot.api("messages.send", {
     user_ids: await user.genString(),
     message: "Были опубликованы новые замены."
