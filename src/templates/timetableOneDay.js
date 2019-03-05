@@ -18,7 +18,7 @@ export default (timetable, subgroup) => {
       if (pair.removed) {
         string += "Пара отменена ❌";
       } else if (pair.error) {
-        string += "Ошибка в обработке ❓";
+        string += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
       } else {
         string += `${pair.name} 🎓${pair.teacher} ${
           pair.classroom === "" ? "" : "🚪"

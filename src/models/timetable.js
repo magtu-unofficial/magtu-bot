@@ -12,7 +12,8 @@ const timetable = mongoose.Schema({
       subgroup: { type: String, enum: ["common", "first", "second"] },
       changed: { type: Boolean },
       removed: { type: Boolean },
-      error: { type: Boolean, default: false }
+      error: { type: Boolean, default: false },
+      string: { type: String }
     }
   ]
 });
