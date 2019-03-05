@@ -10,7 +10,7 @@ const week = [
 
 const singleDigit = 9;
 
-export default date =>
+export default (date: Date) =>
   `${week[date.getDay()]} ${
     date.getDate() > singleDigit ? "" : "0"
   }${date.getDate()}.${

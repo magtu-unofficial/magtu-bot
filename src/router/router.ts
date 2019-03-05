@@ -1,14 +1,22 @@
-export default class Router {
-  routes = {};
+interface Ictx {
+  from: number;
+  text: string;
+  intent: string;
+  parameters: [any];
+  answer: string;
+}
 
-  async route(ctx) {
+export default class Router {
+  routes: { [s: string]: (ctx: Ictx) => string } = {};
+
+  async route(ctx: Ictx) {
     if (this.routes[ctx.intent]) {
       return this.routes[ctx.intent](ctx);
     }
     return ctx.answer;
   }
 
-  add(intent, cb) {
+  add(intent: string, cb: (ctx: Ictx) => string) {
     this.routes[intent] = cb;
   }
 }
