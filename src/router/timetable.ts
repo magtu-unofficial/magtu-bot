@@ -1,7 +1,8 @@
 import Timetable from "../models/timetable";
 import timetableOneDay from "../templates/timetableOneDay";
+import Ictx from "../interfaces/ctx";
 
-export default async ctx => {
+export default async (ctx: Ictx): Promise<string> => {
   try {
     if (!ctx.parameters.subgroup.stringValue) {
       throw Error("subgroup");

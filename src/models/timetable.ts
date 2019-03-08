@@ -1,6 +1,6 @@
 import mongoose from "../utils/mongoose";
 
-const timetable = mongoose.Schema({
+const timetable = new mongoose.Schema({
   date: { type: Date, required: true },
   group: { type: String, required: true },
   pairs: [
