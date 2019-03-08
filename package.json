@@ -6,8 +6,8 @@
   "main": "dist",
   "scripts": {
     "start": "node dist",
-    "dev": "nodemon --ignore dist --exec ts-node src/",
-    "test": "tslint -c tslint.json 'src/**/*.ts' && jest",
+    "dev": "nodemon --watch 'src/**/*.ts' --ignore dist --exec \"ts-node src\"",
+    "test": "tslint -c tslint.json \"src/**/*.ts\"",
     "build": "npm test && tsc"
   },
   "keywords": [],
@@ -33,12 +33,11 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "botact": "^2.4.2",
+    "body-parser": "^1.18.3",
     "dialogflow": "^0.8.0",
     "dotenv": "^6.2.0",
-    "koa": "^2.7.0",
-    "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
-    "mongoose": "^5.4.9"
+    "express": "^4.16.4",
+    "mongoose": "^5.4.9",
+    "node-vk-bot-api": "^2.4.9"
   }
 }

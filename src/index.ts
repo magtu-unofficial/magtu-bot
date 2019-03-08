@@ -1,7 +1,6 @@
-import Koa from "koa";
-import KoaRouter from "koa-router";
-import bodyParser from "koa-bodyparser";
-import { Botact } from "botact";
+import Express from "express";
+import bodyParser from "body-parser";
+import Bot from "node-vk-bot-api";
 import dialogflow from "dialogflow";
 
 import { port, confirm, token } from "./utils/config";
@@ -9,20 +8,20 @@ import router from "./router";
 
 const sessionClient = new dialogflow.SessionsClient();
 
-const app = new Koa();
-const koaRouter = new KoaRouter();
-const bot = new Botact({
+const app = Express();
+const bot = new Bot({
   confirmation: confirm,
   token
 });
 
 bot.on(async msg => {
+  console.log(`${msg.message.from_id} ${msg.message.text}`);
   const sessionPath = sessionClient.sessionPath(
     "vk-bot-7",
-    `vk-${msg.user_id}`
+    `vk-${msg.message.from_id}`
   );
-  msg.api("messages.setActivity", {
-    peer_id: msg.user_id,
+  bot.execute("messages.setActivity", {
+    user_id: msg.message.from_id,
     type: "typing"
   });
 
@@ -31,7 +30,7 @@ bot.on(async msg => {
       session: sessionPath,
       queryInput: {
         text: {
-          text: msg.body,
+          text: msg.message.text,
           languageCode: "ru-RU"
         }
       }
@@ -40,15 +39,16 @@ bot.on(async msg => {
     const result = responses[0].queryResult;
 
     const answer = await router({
-      from: msg.user_id,
-      text: msg.body,
+      from: msg.from_id,
+      text: msg.message.text,
       intent: result.intent.displayName,
       parameters: result.parameters.fields,
       answer: result.fulfillmentText
     });
 
-    await msg.api("messages.send", {
-      peer_id: msg.user_id,
+    await bot.execute("messages.send", {
+      access_token: token,
+      user_id: msg.message.from_id,
       message: answer,
       dont_parse_links: 1,
       keyboard: JSON.stringify({
@@ -76,14 +76,13 @@ bot.on(async msg => {
       })
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 });
 
-koaRouter.post("/", bot.listen);
+app.use(bodyParser.json());
 
-app.use(bodyParser());
-app.use(koaRouter.routes());
+app.post("/", bot.webhookCallback);
 
 app.listen(port, () => {
   console.log("Ok");
