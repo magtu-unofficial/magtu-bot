@@ -1,22 +1,21 @@
-interface Ictx {
-  from: number;
-  text: string;
-  intent: string;
-  parameters: [any];
-  answer: string;
-}
+import Ictx from "../interfaces/ctx";
 
 export default class Router {
-  routes: { [s: string]: (ctx: Ictx) => string } = {};
+  constructor(routes: { [s: string]: (ctx: Ictx) => Promise<string> }) {
+    this.routes = routes;
+  }
 
-  async route(ctx: Ictx) {
+  route = async (ctx: Ictx) => {
+    console.log(this.routes, ctx.intent);
     if (this.routes[ctx.intent]) {
       return this.routes[ctx.intent](ctx);
     }
     return ctx.answer;
-  }
+  };
 
-  add(intent: string, cb: (ctx: Ictx) => string) {
+  add(intent: string, cb: (ctx: Ictx) => Promise<string>) {
     this.routes[intent] = cb;
   }
+
+  routes: { [s: string]: (ctx: Ictx) => Promise<string> } = {};
 }
