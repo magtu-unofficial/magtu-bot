@@ -49,13 +49,13 @@ bot.on(async msg => {
     msg.send(answer, [
       [
         {
-          payload: '{"button":"1"}',
-          label: "Расписание1",
+          payload: { button: "1" },
+          label: "Расписание",
           color: "primary"
         },
         {
-          payload: '{"button":"2"}',
-          label: "Помощь2",
+          payload: { button: "2" },
+          label: "Помощь",
           color: "default"
         }
       ]
