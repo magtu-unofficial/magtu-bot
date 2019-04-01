@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import Bot from "node-vk-bot-api";
 import dialogflow from "dialogflow";
 
-import { port, confirm, token } from "./utils/config";
+import { port, confirm, token, secret } from "./utils/config";
 import router from "./router";
 import middlewares from "./middlewares";
 
@@ -12,7 +12,8 @@ const sessionClient = new dialogflow.SessionsClient();
 const app = Express();
 const bot = new Bot({
   confirmation: confirm,
-  token
+  token,
+  secret
 });
 
 middlewares(bot);
