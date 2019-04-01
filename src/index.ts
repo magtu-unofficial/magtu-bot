@@ -5,6 +5,7 @@ import dialogflow from "dialogflow";
 
 import { port, confirm, token } from "./utils/config";
 import router from "./router";
+import middlewares from "./middlewares";
 
 const sessionClient = new dialogflow.SessionsClient();
 
@@ -14,16 +15,13 @@ const bot = new Bot({
   token
 });
 
+middlewares(bot);
+
 bot.on(async msg => {
-  console.log(`${msg.message.from_id} ${msg.message.text}`);
   const sessionPath = sessionClient.sessionPath(
     "vk-bot-7",
     `vk-${msg.message.from_id}`
   );
-  bot.execute("messages.setActivity", {
-    user_id: msg.message.from_id,
-    type: "typing"
-  });
 
   try {
     const request = {
@@ -46,35 +44,20 @@ bot.on(async msg => {
       answer: result.fulfillmentText
     });
 
-    await bot.execute("messages.send", {
-      access_token: token,
-      user_id: msg.message.from_id,
-      message: answer,
-      dont_parse_links: 1,
-      keyboard: JSON.stringify({
-        one_time: false,
-        buttons: [
-          [
-            {
-              action: {
-                type: "text",
-                payload: '{"button":"1"}',
-                label: "Расписание"
-              },
-              color: "primary"
-            },
-            {
-              action: {
-                type: "text",
-                payload: '{"button":"2"}',
-                label: "Помощь"
-              },
-              color: "default"
-            }
-          ]
-        ]
-      })
-    });
+    msg.send(answer, [
+      [
+        {
+          payload: '{"button":"1"}',
+          label: "Расписание1",
+          color: "primary"
+        },
+        {
+          payload: '{"button":"2"}',
+          label: "Помощь2",
+          color: "default"
+        }
+      ]
+    ]);
   } catch (error) {
     console.log(error);
   }
