@@ -6,6 +6,7 @@ import dialogflow from "dialogflow";
 import { port, confirm, token, secret } from "./utils/config";
 import router from "./router";
 import middlewares from "./middlewares";
+import log from "./utils/log";
 
 const sessionClient = new dialogflow.SessionsClient();
 
@@ -38,7 +39,7 @@ bot.on(async msg => {
     const result = responses[0].queryResult;
 
     const answer = await router({
-      from: msg.from_id,
+      from: msg.peer_id,
       text: msg.message.text,
       intent: result.intent.displayName,
       parameters: result.parameters.fields,
@@ -60,7 +61,7 @@ bot.on(async msg => {
       ]
     ]);
   } catch (error) {
-    console.log(error);
+    log.warn(error.message);
   }
 });
 
@@ -69,5 +70,5 @@ app.use(bodyParser.json());
 app.post("/", bot.webhookCallback);
 
 app.listen(port, () => {
-  console.log("Ok");
+  log.info(`Бот запущен на порту ${port}`);
 });

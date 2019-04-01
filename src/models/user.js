@@ -11,7 +11,7 @@ user.statics.genString = async function genString() {
     return v.id;
   });
 
-  console.log(res);
+  log.debug(res);
 
   const string = ids.reduce((prev, cur, i) => {
     if (i === 0) {
@@ -20,7 +20,7 @@ user.statics.genString = async function genString() {
     return `${prev}, ${cur}`;
   });
 
-  console.log(string);
+  log.debug(string);
   return string;
 };
 

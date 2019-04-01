@@ -6,7 +6,6 @@ export default class Router {
   }
 
   route = async (ctx: Ictx) => {
-    console.log(this.routes, ctx.intent);
     if (this.routes[ctx.intent]) {
       return this.routes[ctx.intent](ctx);
     }

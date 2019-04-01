@@ -1,3 +1,5 @@
+import log from "../utils/log";
+
 enum color {
   primary = "primary",
   default = "default",
@@ -37,6 +39,6 @@ export default (ctx, next) => {
       keyboard: keyboardJSON
     });
   };
-  console.log("Мидлварь send добавленна");
+  log.debug("Мидлварь send добавленна");
   next();
 };

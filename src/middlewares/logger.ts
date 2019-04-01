@@ -1,5 +1,7 @@
+import log from "../utils/log";
+
 export default (ctx: any, next: any) => {
-  const { peer_id, text, payload } = ctx.message;
-  console.log(`${peer_id}: ${text} - ${payload}`);
+  const { peer_id, text } = ctx.message;
+  log.info(`${peer_id}: ${text} - ${ctx.payload}`);
   next();
 };
