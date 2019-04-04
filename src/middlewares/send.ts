@@ -17,7 +17,7 @@ export default (ctx, next) => {
   // Обработка клавиатуры
   ctx.send = async (msg: string, keyboard: Array<Array<Ikeyboard>> = []) => {
     const keyboardJSON = JSON.stringify({
-      one_time: false,
+      one_time: true,
       buttons: keyboard.map(row => {
         return row.map(key => {
           return {
