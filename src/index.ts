@@ -55,7 +55,7 @@ bot.on(async msg => {
         },
         {
           payload: { button: "2" },
-          label: "Помощь",
+          label: "Справка",
           color: "default"
         }
       ]
