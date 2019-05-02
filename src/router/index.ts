@@ -1,11 +1,9 @@
 import Router from "./router";
 
 import timetable from "./timetable";
-import help from "./help";
 
 const router = new Router({
-  timetable,
-  help
+  timetable
 });
 
 export default router.route;

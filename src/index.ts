@@ -6,6 +6,7 @@ import dialogflow from "dialogflow";
 import { port, confirm, token, secret } from "./utils/config";
 import router from "./router";
 import middlewares from "./middlewares";
+import commands from "./commands";
 import log from "./utils/log";
 
 const sessionClient = new dialogflow.SessionsClient();
@@ -18,6 +19,7 @@ const bot = new Bot({
 });
 
 middlewares(bot);
+commands(bot);
 
 bot.on(async msg => {
   const sessionPath = sessionClient.sessionPath(
