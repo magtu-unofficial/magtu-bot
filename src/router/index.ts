@@ -1,9 +1,5 @@
 import Router from "./router";
 
-import timetable from "./timetable";
-
-const router = new Router({
-  timetable
-});
+const router = new Router({});
 
 export default router.route;
