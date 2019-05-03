@@ -1,6 +1,8 @@
 import Esubgroup from "../interfaces/subgroup";
 import Timetable from "../models/timetable";
 import timetableOneDay from "../templates/timetableOneDay";
+import dateTemplate from "../templates/date";
+import { timetableNotFound } from "../text";
 
 export default async (
   ctx: any,
@@ -9,5 +11,9 @@ export default async (
   subgroup: Esubgroup
 ) => {
   const day = await Timetable.findOne({ date, group });
-  ctx.send(timetableOneDay(day, subgroup));
+  if (day) {
+    ctx.send(timetableOneDay(day, subgroup));
+  } else {
+    ctx.send(timetableNotFound(dateTemplate(date)));
+  }
 };
