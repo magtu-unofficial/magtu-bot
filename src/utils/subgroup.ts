@@ -1,9 +1,5 @@
+import Esubgroup from "../interfaces/subgroup";
 import { firstSubgroupRegexp, secondSubgroupRegexp } from "../text";
-
-enum Esubgroup {
-  first = "first",
-  second = "second"
-}
 
 export default (str: string): Esubgroup | undefined => {
   const lowStr = str.toLowerCase();

@@ -20,4 +20,8 @@ describe("Проверка группы", () => {
   test("Нет последней цифры", () => {
     expect(group("испк-11")).toBe(undefined);
   });
+
+  test("Последняя цифра очень большая", () => {
+    expect(group("испк-11")).toBe(undefined);
+  });
 });
