@@ -1,21 +1,13 @@
 import log from "../utils/log";
-
-enum color {
-  primary = "primary",
-  default = "default",
-  negative = "negative",
-  positive = "positive"
-}
-
-interface Ikeyboard {
-  payload: object;
-  label: string;
-  color: color;
-}
+import Ikeyboard from "../interfaces/keyboard";
+import defaultKeyboard from "../keyboards/default";
 
 export default (ctx, next) => {
   // Обработка клавиатуры
-  ctx.send = async (msg: string, keyboard: Array<Array<Ikeyboard>> = []) => {
+  ctx.send = async (
+    msg: string,
+    keyboard: Array<Array<Ikeyboard>> = defaultKeyboard
+  ) => {
     const keyboardJSON = JSON.stringify({
       one_time: true,
       buttons: keyboard.map(row => {
@@ -23,7 +15,7 @@ export default (ctx, next) => {
           return {
             action: {
               type: "text",
-              payload: JSON.stringify(key.payload),
+              payload: JSON.stringify(key.payload || {}),
               label: key.label
             },
             color: key.color
