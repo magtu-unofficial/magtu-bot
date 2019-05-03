@@ -15,5 +15,8 @@ export const groupError = `❌Группа указана неверно. Ука
 
 export const subgroupError = `❌Подгруппа указана неверно. Выберите первую или вторую подгруппу`;
 
+export const cmdNotFound = `❌Команда не найдена.
+Что бы узнать как пользоваться ботом напишите "Справка"`;
+
 export const firstSubgroupRegexp = /1|перв|один/i;
 export const secondSubgroupRegexp = /2|втор|два/i;
