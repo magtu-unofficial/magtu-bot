@@ -1,20 +1,4 @@
-const days: { [key: string]: RegExp } = {
-  "0": /(вс|воскресенье)/i,
-  "1": /(пн|понедельник)/i,
-  "2": /(вт|вторник)/i,
-  "3": /(ср|сред[ау])/i,
-  "4": /(чт|четверг)/i,
-  "5": /(пт|пятниц[ау])/i,
-  "6": /(сб|суббот[ау])/i
-};
-
-const relative: { [key: string]: RegExp } = {
-  "-2": /позавчера/i,
-  "-1": /вчера/i,
-  "0": /сегодня/i,
-  "1": /завтра/i,
-  "2": /послезавтра/i
-};
+import { daysRelativeRegExp, daysWeekRegExp } from "../text";
 
 export default (str: string, from: Date = new Date()): Date | undefined => {
   // Копирование даты из аргумента
@@ -43,9 +27,9 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
   }
 
   // Обработка дней недели
-  for (const key in days) {
-    if (days.hasOwnProperty(key)) {
-      const element = days[key];
+  for (const key in daysWeekRegExp) {
+    if (daysWeekRegExp.hasOwnProperty(key)) {
+      const element = daysWeekRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
         const date = new Date(currentDate);
@@ -64,9 +48,9 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
   }
 
   // Обработка относительных дат
-  for (const key in relative) {
-    if (relative.hasOwnProperty(key)) {
-      const element = relative[key];
+  for (const key in daysRelativeRegExp) {
+    if (daysRelativeRegExp.hasOwnProperty(key)) {
+      const element = daysRelativeRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
         const date = new Date(currentDate);
