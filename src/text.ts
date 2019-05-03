@@ -16,6 +16,7 @@ export const timetableForGroup = (
   group: string,
   subgroup: string
 ) => `Расписание для группы ${group} ${subgroup} подгруппы на ${date}`;
+
 export const firstSubgroup = `первой`;
 export const secondSubgroup = `второй`;
 export const pairCanceled = `Пара отменена ❌`;
@@ -29,6 +30,7 @@ export const helpKey = `Справка`;
 export const tomorrowKey = `Завтра`;
 export const todayKey = `Сегодня`;
 export const yesterdayKey = `Вчера`;
+export const anotherDateKey = `Другая дата`;
 export const firstSubgroupKey = "Первая";
 export const secondSubgroupKey = "Вторая";
 export const cancelKey = `Отмена`;
@@ -36,7 +38,7 @@ export const cancelKey = `Отмена`;
 export const canceled = `Отменено.
 Если у вас возникли проблемы при использовании бота напишите сюда https://vk.com/ivanik7`;
 
-export const dateError = `❌Дата указана неверно. Укажите дату в одном из следующих форматах:
+export const dateError = `Дату можно указать одном из следующих форматов:
 ✅ДД.ММ.ГГГГ например 01.03.2019
 ✅ДД.ММ например 15.10
 ✅День недели, например понедельник
