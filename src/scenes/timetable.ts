@@ -17,46 +17,60 @@ export default new Scene(
   },
 
   ctx => {
-    if (ctx.canceled) ctx.scene.leave();
-    // Обработка даты
-    ctx.session.date = date(ctx.message.text);
-    if (ctx.session.date) {
-      // Запрос группы
-      ctx.scene.next();
-      ctx.send(text.groupQuery, groupKeyboard);
-    } else {
-      // Повторный запрос даты
-      ctx.scene.step = ctx.scene.step;
-      ctx.send(text.dateError, dateKeyboard);
-    }
-  },
-
-  ctx => {
-    if (ctx.canceled) ctx.scene.leave();
-    // Обработка группы
-    ctx.session.group = group(ctx.message.text);
-    if (ctx.session.group) {
-      // Запрос подгруппы
-      ctx.scene.next();
-      ctx.send(text.subgroupQuery, subgroupKeyboard);
-    } else {
-      // Повторный запрос группы
-      ctx.scene.step = ctx.scene.step;
-      ctx.send(text.groupError, groupKeyboard);
-    }
-  },
-
-  ctx => {
-    if (ctx.canceled) ctx.scene.leave();
-    // Обработка подгруппы
-    ctx.session.subgroup = subgroup(ctx.message.text);
-    if (ctx.session.subgroup) {
+    if (ctx.canceled) {
       ctx.scene.leave();
-      timetable(ctx, ctx.session.date, ctx.session.group, ctx.session.subgroup);
     } else {
-      // Повторный запрос подгруппы
-      ctx.scene.step = ctx.scene.step;
-      ctx.send(text.subgroupError, subgroupKeyboard);
+      // Обработка даты
+      ctx.session.date = date(ctx.message.text);
+      if (ctx.session.date) {
+        // Запрос группы
+        ctx.scene.next();
+        ctx.send(text.groupQuery, groupKeyboard);
+      } else {
+        // Повторный запрос даты
+        // ctx.scene.step = ctx.scene.step;
+        ctx.send(text.dateError, dateKeyboard);
+      }
+    }
+  },
+
+  ctx => {
+    if (ctx.canceled) {
+      ctx.scene.leave();
+    } else {
+      // Обработка группы
+      ctx.session.group = group(ctx.message.text);
+      if (ctx.session.group) {
+        // Запрос подгруппы
+        ctx.scene.next();
+        ctx.send(text.subgroupQuery, subgroupKeyboard);
+      } else {
+        // Повторный запрос группы
+        // ctx.scene.step = ctx.scene.step;
+        ctx.send(text.groupError, groupKeyboard);
+      }
+    }
+  },
+
+  ctx => {
+    if (ctx.canceled) {
+      ctx.scene.leave();
+    } else {
+      // Обработка подгруппы
+      ctx.session.subgroup = subgroup(ctx.message.text);
+      if (ctx.session.subgroup) {
+        ctx.scene.leave();
+        timetable(
+          ctx,
+          ctx.session.date,
+          ctx.session.group,
+          ctx.session.subgroup
+        );
+      } else {
+        // Повторный запрос подгруппы
+        // ctx.scene.step = ctx.scene.step;
+        ctx.send(text.subgroupError, subgroupKeyboard);
+      }
     }
   }
 );
