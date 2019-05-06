@@ -1,14 +1,21 @@
 import date from "./date";
 import numberToEmoji from "./numberToEmoji";
+import {
+  timetableForGroup,
+  firstSubgroup,
+  secondSubgroup,
+  pairCanceled
+} from "../text";
 
 const maxPairsCount = 10;
 
 export default (timetable, subgroup) => {
-  let answer = `Расписание для группы ${timetable.group} ${
-    subgroup === "first" ? "первой" : ""
-  }${subgroup === "second" ? "второй" : ""} подгруппы на ${date(
-    timetable.date
-  )}`;
+  let answer = timetableForGroup(
+    date(timetable.date),
+    timetable.group,
+    subgroup === "first" ? firstSubgroup : secondSubgroup
+  );
+
   for (let i = 0; i < maxPairsCount; i += 1) {
     const pair = timetable.pairs.find(e => {
       return (
@@ -18,7 +25,7 @@ export default (timetable, subgroup) => {
     if (pair) {
       answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.removed) {
-        answer += "Пара отменена ❌";
+        answer += pairCanceled;
       } else if (pair.error) {
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
       } else {
