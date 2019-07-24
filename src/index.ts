@@ -26,6 +26,10 @@ app.use(bodyParser.json());
 
 app.post("/", bot.webhookCallback);
 
+app.get("/", (req, res) => {
+  res.send("ok");
+});
+
 app.listen(port, () => {
   log.info(`Бот запущен на порту ${port}`);
 });
