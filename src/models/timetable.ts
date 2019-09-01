@@ -3,6 +3,7 @@ import mongoose from "../utils/mongoose";
 const timetable = new mongoose.Schema({
   date: { type: Date, required: true },
   group: { type: String, required: true },
+  displayName: String,
   pairs: [
     {
       number: { type: Number, required: true },

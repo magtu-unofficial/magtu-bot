@@ -12,7 +12,7 @@ const maxPairsCount = 10;
 export default (timetable, subgroup) => {
   let answer = timetableForGroup(
     date(timetable.date),
-    timetable.group,
+    timetable.displayName,
     subgroup === "first" ? firstSubgroup : secondSubgroup
   );
 
