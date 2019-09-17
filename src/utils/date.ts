@@ -19,8 +19,9 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
     numbers.length <= 3 &&
     numbers.findIndex(val => isNaN(val)) === -1
   ) {
+    const year = numbers[2] || currentDate.getFullYear();
     return new Date(
-      numbers[2] || currentDate.getFullYear(),
+      year >= 2000 ? year : year + 2000,
       numbers[1] - 1,
       numbers[0]
     );

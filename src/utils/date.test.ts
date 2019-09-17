@@ -7,6 +7,12 @@ describe("Дата цифами", () => {
     );
   });
 
+  test("01.23.19", () => {
+    expect(date("02.03.2019").toISOString()).toBe(
+      new Date(2019, 2, 2).toISOString()
+    );
+  });
+
   test("01.23", () => {
     expect(date("02.03", new Date(2018, 1, 1)).toISOString()).toBe(
       new Date(2018, 2, 2).toISOString()
