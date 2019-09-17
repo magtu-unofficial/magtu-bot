@@ -7,10 +7,12 @@ import chat from "./chat";
 import session from "./session";
 import stage from "./stage";
 import cancel from "./cancel";
+import resend from "./resend";
 
 export default (bot: any) => {
   bot.use(chat);
   bot.use(typing);
+  bot.use(resend);
   bot.use(logger);
   bot.use(payload);
   bot.use(send);
