@@ -35,7 +35,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "mongoose": "^5.4.20",
+    "mongoose": "^5.7.5",
     "node-vk-bot-api": "^2.4.10",
     "winston": "^3.2.1"
   }
