@@ -3,4 +3,5 @@ export default (str: string): string | undefined => {
   if (group && group.index === 0) {
     return group[0].toLowerCase();
   }
+  return undefined;
 };

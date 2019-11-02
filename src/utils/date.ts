@@ -29,7 +29,7 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
 
   // Обработка дней недели
   for (const key in daysWeekRegExp) {
-    if (daysWeekRegExp.hasOwnProperty(key)) {
+    if ({}.hasOwnProperty.call(daysWeekRegExp, key)) {
       const element = daysWeekRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
@@ -50,7 +50,7 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
 
   // Обработка относительных дат
   for (const key in daysRelativeRegExp) {
-    if (daysRelativeRegExp.hasOwnProperty(key)) {
+    if ({}.hasOwnProperty.call(daysRelativeRegExp, key)) {
       const element = daysRelativeRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
@@ -62,4 +62,6 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
       }
     }
   }
+
+  return undefined;
 };

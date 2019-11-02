@@ -1,4 +1,5 @@
 import user from "../models/user";
+
 const getSessionKey = (ctx): number => {
   const userId = ctx.message.peer_id || ctx.message.from_id;
 
@@ -6,7 +7,7 @@ const getSessionKey = (ctx): number => {
 };
 
 export default async (ctx, next) => {
-  const key = this.getSessionKey(ctx);
+  const key = getSessionKey(ctx);
 
   ctx.session = await user.get(key);
   await next();

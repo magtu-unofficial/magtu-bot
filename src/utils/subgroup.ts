@@ -9,4 +9,5 @@ export default (str: string): Esubgroup | undefined => {
   if (lowStr.search(secondSubgroupRegexp) === 0) {
     return Esubgroup.second;
   }
+  return undefined;
 };
