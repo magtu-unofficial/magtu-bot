@@ -14,7 +14,7 @@ RUN npm install
 
 # Скопировать исходники приложения
 COPY . .
-RUN npm run build
+RUN npm run test && npm run build
 
 EXPOSE 8080
 CMD [ "node", "dist" ]
