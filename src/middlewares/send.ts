@@ -24,11 +24,12 @@ export default (ctx, next) => {
       })
     });
 
-    ctx.bot.execute("messages.send", {
+    await ctx.bot.execute("messages.send", {
       peer_id: ctx.message.peer_id,
       message: msg,
       dont_parse_links: 1,
-      keyboard: keyboardJSON
+      keyboard: keyboardJSON,
+      random_id: Date.now()
     });
   };
   log.debug("Мидлварь send добавленна");
