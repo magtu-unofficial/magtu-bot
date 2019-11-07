@@ -42,7 +42,6 @@ class Command {
             // Повторный запрос
             ctx.send(arg.error, arg.keyboard);
           }
-
         }
       };
     });
@@ -93,7 +92,7 @@ class Command {
     } else {
       ctx.send(argsError);
     }
-  }
+  };
 
   name: string;
   regexp: RegExp;
