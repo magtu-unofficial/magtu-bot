@@ -1,6 +1,10 @@
-import { daysRelativeRegExp, daysWeekRegExp } from "../text";
+import { dateArg, cancelKey } from "../text";
+import { color } from "../interfaces/keyboard";
 
-export default (str: string, from: Date = new Date()): Date | undefined => {
+export const parser = (
+  str: string,
+  from: Date = new Date()
+): Date | undefined => {
   // Копирование даты из аргумента
   const currentDate = new Date(from);
   // Сброс времени learn
@@ -28,9 +32,9 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
   }
 
   // Обработка дней недели
-  for (const key in daysWeekRegExp) {
-    if ({}.hasOwnProperty.call(daysWeekRegExp, key)) {
-      const element = daysWeekRegExp[key];
+  for (const key in dateArg.daysWeekRegExp) {
+    if ({}.hasOwnProperty.call(dateArg.daysWeekRegExp, key)) {
+      const element = dateArg.daysWeekRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
         const date = new Date(currentDate);
@@ -49,9 +53,9 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
   }
 
   // Обработка относительных дат
-  for (const key in daysRelativeRegExp) {
-    if ({}.hasOwnProperty.call(daysRelativeRegExp, key)) {
-      const element = daysRelativeRegExp[key];
+  for (const key in dateArg.daysRelativeRegExp) {
+    if ({}.hasOwnProperty.call(dateArg.daysRelativeRegExp, key)) {
+      const element = dateArg.daysRelativeRegExp[key];
       const day = parseInt(key, 10);
       if (str.search(element) === 0) {
         const date = new Date(currentDate);
@@ -64,4 +68,17 @@ export default (str: string, from: Date = new Date()): Date | undefined => {
   }
 
   return undefined;
+};
+
+export default {
+  ...dateArg,
+  keyboard: [
+    [
+      { label: dateArg.yesterdayKey, color: color.default },
+      { label: dateArg.todayKey, color: color.default },
+      { label: dateArg.tomorrowKey, color: color.default }
+    ],
+    [{ label: cancelKey, color: color.negative }]
+  ],
+  parser
 };

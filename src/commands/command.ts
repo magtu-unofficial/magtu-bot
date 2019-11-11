@@ -1,15 +1,6 @@
 import Scene from "node-vk-bot-api/lib/scene";
-import Ikeyboard from "../interfaces/keyboard";
 import { argsError } from "../text";
-
-interface Iarg {
-  name: string;
-  query: string;
-  error: string;
-  help: string;
-  keyboard: Array<Ikeyboard>;
-  parser: (str: string) => any;
-}
+import Iarg from "../interfaces/arg";
 
 class Command {
   constructor(
@@ -24,7 +15,7 @@ class Command {
     this.done = done;
 
     const scene = this.args.map((arg, index) => {
-      return (ctx: any) => {
+      return async (ctx: any) => {
         if (ctx.canceled) {
           ctx.scene.leave();
         } else {
@@ -33,7 +24,7 @@ class Command {
           if (ctx.session.args[index]) {
             if (index === args.length - 1) {
               ctx.scene.leave();
-              this.done(ctx);
+              await this.done(ctx);
             } else {
               ctx.scene.next();
               ctx.send(args[index + 1].query, args[index + 1].keyboard);
@@ -42,7 +33,6 @@ class Command {
             // Повторный запрос
             ctx.send(arg.error, arg.keyboard);
           }
-
         }
       };
     });
@@ -61,7 +51,7 @@ class Command {
     bot.command(this.regexp, this.cb);
   };
 
-  cb = (ctx: any) => {
+  cb = async (ctx: any) => {
     const argsCount: number = ctx.args.length;
     if (!ctx.session.args) {
       ctx.session.args = [];
@@ -86,14 +76,14 @@ class Command {
         }
       }
       if (errors.length === 0) {
-        this.done(ctx);
+        await this.done(ctx);
       } else {
         ctx.send(errors.join("\n"));
       }
     } else {
       ctx.send(argsError);
     }
-  }
+  };
 
   name: string;
   regexp: RegExp;
