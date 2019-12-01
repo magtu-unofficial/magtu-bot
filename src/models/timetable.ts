@@ -1,4 +1,5 @@
 import mongoose from "../utils/mongoose";
+import Ipair from "../interfaces/pair";
 
 const timetable = new mongoose.Schema({
   date: { type: Date, required: true },
@@ -19,6 +20,18 @@ const timetable = new mongoose.Schema({
   ]
 });
 
-timetable.index({ date: 1, group: -1 }, { unique: true });
+interface ItimetableDocument extends mongoose.Document {
+  date: Date;
+  group: Array<string>;
+  displayName: string;
+  pairs: Array<Ipair>;
+  error: string;
+}
 
-export default mongoose.model("Timetable", timetable);
+interface ItimetableModel extends mongoose.Model<ItimetableDocument> {}
+
+const model: ItimetableModel = mongoose.model<
+  ItimetableDocument,
+  ItimetableModel
+>("Timetable", timetable);
+export default model;

@@ -4,13 +4,16 @@ import timetable from "./timetable";
 import tt from "../reply/timetable";
 import date from "../args/date";
 import sb from "../interfaces/subgroup";
+import teacher from "./teacher";
 
 export default (bot: any) => {
-  const stage = new Stage(timetable.scene);
+  const stage = new Stage(timetable.scene, teacher.scene);
   bot.use(stage.middleware());
 
-  bot.command(/справка|помощь/, help);
   timetable.add(bot);
+  teacher.add(bot);
+
+  bot.command(/справка|помощь/, help);
   bot.command(/рейд/i, async ctx => {
     await ctx.send("Э, Рейд, лови расписуху на завтра");
     await tt(ctx, date.parser("завтра"), "исп-19-4", sb.second);

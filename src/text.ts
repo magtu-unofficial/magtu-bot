@@ -72,6 +72,9 @@ export const timetableForGroup = (
   subgroup: string
 ) => `Расписание для группы ${group} ${subgroup} подгруппы на ${date}`;
 
+export const timetableForTeacher = (date: string, teacher: string) =>
+  `Расписание преподователя ${teacher} на ${date}`;
+
 export const pairCanceled = `Пара отменена ❌`;
 
 export const firstSubgroup = `первой`;
