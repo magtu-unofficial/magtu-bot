@@ -78,7 +78,10 @@ export default {
       { label: dateArg.todayKey, color: color.default },
       { label: dateArg.tomorrowKey, color: color.default }
     ],
-    [{ label: cancelKey, color: color.negative }]
+    [
+      { label: dateArg.another, color: color.positive },
+      { label: cancelKey, color: color.negative }
+    ]
   ],
   parser
 };

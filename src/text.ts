@@ -21,6 +21,7 @@ export const dateArg = {
   tomorrowKey: "Завтра",
   todayKey: "Сегодня",
   yesterdayKey: "Вчера",
+  another: "Другая дата",
 
   daysWeekRegExp: {
     "0": /(вс|воскресенье)/i,

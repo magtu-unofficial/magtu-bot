@@ -7,6 +7,7 @@ import chat from "./chat";
 import session from "./session";
 import cancel from "./cancel";
 import resend from "./resend";
+import anotherDate from "./anotherDate";
 
 export default (bot: any) => {
   bot.use(chat);
@@ -18,4 +19,5 @@ export default (bot: any) => {
   bot.use(args);
   bot.use(cancel);
   bot.use(session);
+  bot.use(anotherDate);
 };
