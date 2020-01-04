@@ -1,4 +1,4 @@
-import { cancelKey, groupArg } from "../text";
+import { cancelKey, teacherArg } from "../text";
 import { color } from "../interfaces/keyboard";
 
 export const parser = (str: string): string | undefined => {
@@ -10,7 +10,7 @@ export const parser = (str: string): string | undefined => {
 };
 
 export default {
-  ...groupArg,
+  ...teacherArg,
   keyboard: [[{ label: cancelKey, color: color.negative }]],
   parser
 };
