@@ -8,8 +8,8 @@ mongoose.connect(
   {
     useNewUrlParser: true,
     useCreateIndex: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 500
+    useUnifiedTopology: true,
+    useFindAndModify: false
   },
   err => {
     if (err) {

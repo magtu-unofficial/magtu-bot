@@ -28,7 +28,8 @@ module.exports = {
       { vars: "all", args: "after-used", ignoreRestSiblings: false }
     ],
     "lines-between-class-members": "off",
-    "no-restricted-globals": "off"
+    "no-restricted-globals": "off",
+    "import/extensions": "off"
   },
   settings: {
     "import/resolver": {
