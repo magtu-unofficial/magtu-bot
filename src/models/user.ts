@@ -2,6 +2,7 @@ import mongoose from "../utils/mongoose";
 
 const user = new mongoose.Schema({
   id: Number,
+  notify: Boolean,
   data: Object
 });
 
@@ -18,6 +19,21 @@ user.statics.set = async function set(id: number, data: any) {
   }
 };
 
+user.statics.setNotify = async function setNotify(id: number, enable: boolean) {
+  const doc = await this.findOneAndUpdate({ id }, { notify: enable });
+  if (!doc) {
+    const newdoc = new this({ id, notify: enable });
+    await newdoc.save();
+  }
+};
+
+user.statics.getNotifyList = async function getNotifyList() {
+  const doc = await this.find({ notify: { $eq: true } }, { id: true });
+  return doc.map(u => {
+    return u.id;
+  });
+};
+
 interface IuserDocument extends mongoose.Document {
   id: number;
   data: any;
@@ -26,6 +42,8 @@ interface IuserDocument extends mongoose.Document {
 interface IuserModel extends mongoose.Model<IuserDocument> {
   get(id: number): Promise<any>;
   set(id: number, data: any): Promise<void>;
+  setNotify(id: number, enable: boolean): Promise<void>;
+  getNotifyList(): Promise<Array<number>>;
 }
 
 const model: IuserModel = mongoose.model<IuserDocument, IuserModel>(

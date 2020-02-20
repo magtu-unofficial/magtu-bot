@@ -2,11 +2,13 @@ import Express from "express";
 import bodyParser from "body-parser";
 import Bot from "node-vk-bot-api";
 
-import { port, confirm, token, secret } from "./utils/config";
+import { port, confirm, token, secret, notifySecret } from "./utils/config";
 import middlewares from "./middlewares";
 import commands from "./commands";
 import log from "./utils/log";
 import { cmdNotFound } from "./text";
+import User from "./models/user";
+import sendMany from "./utils/sendMany";
 
 const app = Express();
 const bot = new Bot({
@@ -28,6 +30,17 @@ app.post("/", bot.webhookCallback);
 
 app.get("/", (req, res) => {
   res.send("ok");
+});
+
+app.get("/notify", async (req, res) => {
+  if (req.query.secret === notifySecret) {
+    res.send("ok");
+    const list = await User.getNotifyList();
+    console.log(list);
+    sendMany(bot, list, "Ееее! Новые замены");
+  } else {
+    res.send("Wrong secret");
+  }
 });
 
 app.listen(port, () => {

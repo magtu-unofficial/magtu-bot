@@ -23,7 +23,7 @@ class Command {
         } else {
           ctx.session.args[index] = arg.parser(ctx.message.text);
 
-          if (ctx.session.args[index]) {
+          if (ctx.session.args[index] !== undefined) {
             if (index === args.length - 1) {
               ctx.scene.leave();
               await this.done(ctx);
@@ -81,7 +81,7 @@ class Command {
           } else {
             ctx.session.args[i] = qarg.parser(garg);
           }
-          if (!ctx.session.args[i]) {
+          if (ctx.session.args[i] === undefined) {
             errors.push(qarg.error);
           }
         }

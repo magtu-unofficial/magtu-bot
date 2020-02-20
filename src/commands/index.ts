@@ -6,13 +6,15 @@ import date from "../args/date";
 import sb from "../interfaces/subgroup";
 import teacher from "./teacher";
 import sendAdmin from "../utils/sendAdmin";
+import notify from "./notify";
 
 export default (bot: any) => {
-  const stage = new Stage(timetable.scene, teacher.scene);
+  const stage = new Stage(timetable.scene, teacher.scene, notify.scene);
   bot.use(stage.middleware());
 
   timetable.add(bot);
   teacher.add(bot);
+  notify.add(bot);
 
   bot.command(/справка|помощь|начать|start/, help);
   bot.command(/рейд/i, async ctx => {
