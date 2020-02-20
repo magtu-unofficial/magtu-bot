@@ -14,7 +14,7 @@ export default (bot: any) => {
   timetable.add(bot);
   teacher.add(bot);
 
-  bot.command(/справка|помощь/, help);
+  bot.command(/справка|помощь|начать|start/, help);
   bot.command(/рейд/i, async ctx => {
     await ctx.send("Э, Рейд, лови расписуху на завтра");
     await tt(ctx, date.parser("завтра"), "исп-19-4", sb.second);
