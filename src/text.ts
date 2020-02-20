@@ -90,6 +90,7 @@ export const secondSubgroup = `второй`;
 
 export const timetableKey = `Расписание`;
 export const helpKey = `Справка`;
+export const reportKey = "💢Сообщить об ошибке";
 
 export const cancelKey = `Отмена`;
 

@@ -8,3 +8,4 @@ export const token = process.env.TOKEN;
 export const secret = process.env.SECRET;
 export const chatSign = process.env.CHAT_SIGN;
 export const mongoUri = process.env.MONGO_URI;
+export const adminId = process.env.ADMIN_ID;

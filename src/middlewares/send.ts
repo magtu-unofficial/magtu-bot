@@ -1,6 +1,7 @@
 import log from "../utils/log";
 import Ikeyboard from "../interfaces/keyboard";
 import defaultKeyboard from "../keyboards/default";
+import sendAdmin from "../utils/sendAdmin";
 
 export default (ctx, next) => {
   // Обработка клавиатуры
@@ -24,13 +25,22 @@ export default (ctx, next) => {
       })
     });
 
-    await ctx.bot.execute("messages.send", {
-      peer_id: ctx.message.peer_id,
-      message: msg,
-      dont_parse_links: 1,
-      keyboard: keyboardJSON,
-      random_id: Date.now()
-    });
+    try {
+      await ctx.bot.execute("messages.send", {
+        peer_id: ctx.message.peer_id,
+        message: msg,
+        dont_parse_links: 1,
+        keyboard: keyboardJSON,
+        random_id: Date.now()
+      });
+    } catch (error) {
+      await sendAdmin(
+        ctx.bot,
+        `send error https://vk.com/id${ctx.message.peer_id}
+${msg}
+${JSON.stringify(error)}`
+      );
+    }
   };
   log.debug("Мидлварь send добавленна");
   next();
