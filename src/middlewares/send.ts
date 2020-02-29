@@ -2,6 +2,7 @@ import log from "../utils/log";
 import Ikeyboard from "../interfaces/keyboard";
 import defaultKeyboard from "../keyboards/default";
 import sendAdmin from "../utils/sendAdmin";
+import { unexpectedError } from "../text";
 
 export default (ctx, next) => {
   // Обработка клавиатуры
@@ -34,6 +35,7 @@ export default (ctx, next) => {
         random_id: Date.now()
       });
     } catch (error) {
+      ctx.send(unexpectedError);
       await sendAdmin(
         ctx.bot,
         `send error https://vk.com/id${ctx.message.peer_id}
