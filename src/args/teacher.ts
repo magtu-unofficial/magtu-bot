@@ -2,9 +2,14 @@ import { cancelKey, teacherArg } from "../text";
 import { color } from "../interfaces/keyboard";
 
 export const parser = (str: string): string | undefined => {
-  const teacher = str.match(/[а-яё]{3,} {1,2}[А-ЯЁ][а-яё]?\.[А-ЯЁ]\.?/i);
+  const teacher = str
+    .toLowerCase()
+    .match(/([а-яё]{3,})( ([а-яё])\.? ?([а-яё]))?/i);
   if (teacher && teacher.index === 0) {
-    return teacher[0].toLowerCase();
+    if (teacher[2]) {
+      return `${teacher[1]} ${teacher[3]}.${teacher[4]}.`;
+    }
+    return teacher[1];
   }
   return undefined;
 };
