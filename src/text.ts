@@ -21,6 +21,7 @@ export const dateArg = {
   tomorrowKey: "Завтра",
   todayKey: "Сегодня",
   yesterdayKey: "Вчера",
+  allKey: "Всё доступное",
   another: "Другая дата",
 
   daysWeekRegExp: {
@@ -109,6 +110,8 @@ export const canceled = `Отменено.
 Если у вас возникли проблемы при использовании бота напишите сюда https://vk.com/ivanik7`;
 
 export const argsError = `❌Неправельное число аргументов. Для справки напишите "Справка"`;
+
+export const unexpectedError = `❌Произошла неизвестная ошибка. Повторите попытку позже`;
 
 export const cmdNotFound = `❌Команда не найдена.
 Что бы узнать как пользоваться ботом напишите "Справка"`;

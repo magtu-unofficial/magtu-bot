@@ -4,7 +4,11 @@ import { color } from "../interfaces/keyboard";
 export const parser = (
   str: string,
   from: Date = new Date()
-): Date | undefined => {
+): Date | string | undefined => {
+  if (str.search(/Вс(ё|е)|all/i) !== -1) {
+    return "all";
+  }
+
   // Копирование даты из аргумента
   const currentDate = new Date(from);
   // Сброс времени learn
