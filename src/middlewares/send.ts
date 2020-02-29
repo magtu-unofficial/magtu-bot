@@ -1,18 +1,33 @@
 import log from "../utils/log";
-import Ikeyboard from "../interfaces/keyboard";
-import defaultKeyboard from "../keyboards/default";
+import Ikeyboard, { color } from "../interfaces/keyboard";
 import sendAdmin from "../utils/sendAdmin";
-import { unexpectedError } from "../text";
+import { unexpectedError, timetableKey, helpKey, reportKey } from "../text";
 
 export default (ctx, next) => {
-  // Обработка клавиатуры
-  ctx.send = async (
-    msg: string,
-    keyboard: Array<Array<Ikeyboard>> = defaultKeyboard
-  ) => {
+  ctx.send = async (msg: string, keyboard: Array<Array<Ikeyboard>>) => {
+    const defaultKeyboard: Array<Array<Ikeyboard>> = [
+      [
+        { label: timetableKey, color: color.primary },
+        { label: helpKey, color: color.default }
+      ]
+    ];
+    const now = new Date();
+    if (
+      !ctx.session.lastReport ||
+      now.getTime() - ctx.session.lastReport.getTime() > 86400000
+    ) {
+      defaultKeyboard.push([
+        {
+          label: reportKey,
+          color: color.default,
+          payload: { command: "ошибка" }
+        }
+      ]);
+    }
+
     const keyboardJSON = JSON.stringify({
       one_time: true,
-      buttons: keyboard.map(row => {
+      buttons: (keyboard || defaultKeyboard).map(row => {
         return row.map(key => {
           return {
             action: {

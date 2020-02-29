@@ -12,12 +12,12 @@ import anotherDate from "./anotherDate";
 export default (bot: any) => {
   bot.use(chat);
   bot.use(typing);
-  bot.use(resend);
   bot.use(logger);
+  bot.use(session);
+  bot.use(resend);
   bot.use(payload);
   bot.use(send);
   bot.use(args);
   bot.use(cancel);
-  bot.use(session);
   bot.use(anotherDate);
 };

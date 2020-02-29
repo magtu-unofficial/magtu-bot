@@ -22,6 +22,7 @@ export default (bot: any) => {
     await tt(ctx, date.parser("завтра"), "исп-19-4", sb.second);
   });
   bot.command(/ошибка/i, async ctx => {
+    ctx.session.lastReport = new Date();
     await ctx.send("Спасибо за сообщение");
     await sendAdmin(
       ctx.bot,
