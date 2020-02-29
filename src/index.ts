@@ -36,8 +36,7 @@ app.get("/notify", async (req, res) => {
   if (req.query.secret === notifySecret) {
     res.send("ok");
     const list = await User.getNotifyList();
-    console.log(list);
-    sendMany(bot, list, "Ееее! Новые замены");
+    await sendMany(bot, list, `Вышли новые замены. ${req.query.text || ""}`);
   } else {
     res.send("Wrong secret");
   }
