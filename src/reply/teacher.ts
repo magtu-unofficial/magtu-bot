@@ -2,7 +2,7 @@ import Timetable from "../models/timetable";
 import { Itpair } from "../interfaces/pair";
 import teacherTemplate from "../templates/teacher";
 import dateTemplate from "../templates/date";
-import { timetableNotFound } from "../text";
+import { timetableNotFound, teacherFio } from "../text";
 
 const find = async (
   date: Date,
@@ -71,7 +71,7 @@ export default async (ctx, date: Date | string, teacher: string) => {
     if (error.message === "Not found") {
       await ctx.send(timetableNotFound(dateTemplate(date)));
     } else if (error.message === "Too many teachers") {
-      await ctx.send("change me");
+      await ctx.send(teacherFio);
     }
   }
 };
