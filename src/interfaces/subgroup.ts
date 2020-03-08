@@ -1,6 +1,7 @@
 enum Esubgroup {
   first = "first",
-  second = "second"
+  second = "second",
+  common = "common"
 }
 
 export default Esubgroup;

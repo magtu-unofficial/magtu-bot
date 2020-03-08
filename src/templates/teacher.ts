@@ -3,16 +3,13 @@ import numberToEmoji from "./numberToEmoji";
 import { timetableForTeacher } from "../text";
 import { Itpair } from "../interfaces/pair";
 
-const maxPairsCount = 10;
-
 export default (pairs: Array<Itpair>, d: Date) => {
   let answer = timetableForTeacher(date(d), pairs[0].teacher);
 
-  for (let i = 0; i < maxPairsCount; i += 1) {
-    const pair = pairs.find(e => {
-      return e.number === i;
-    });
-    if (pair) {
+  const sortedPairs = pairs.sort((a, b) => a.number - b.number);
+
+  for (const pair of sortedPairs) {
+    if (!pair.removed) {
       answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.error) {
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
@@ -23,5 +20,6 @@ export default (pairs: Array<Itpair>, d: Date) => {
       }
     }
   }
+
   return answer;
 };

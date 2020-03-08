@@ -6,8 +6,7 @@ import {
   secondSubgroup,
   pairCanceled
 } from "../text";
-
-const maxPairsCount = 10;
+import Esubgroup from "../interfaces/subgroup";
 
 export default (timetable, subgroup) => {
   let answer = timetableForGroup(
@@ -16,13 +15,10 @@ export default (timetable, subgroup) => {
     subgroup === "first" ? firstSubgroup : secondSubgroup
   );
 
-  for (let i = 0; i < maxPairsCount; i += 1) {
-    const pair = timetable.pairs.find(e => {
-      return (
-        e.number === i && (e.subgroup === subgroup || e.subgroup === "common")
-      );
-    });
-    if (pair) {
+  const sortedPairs = timetable.pairs.sort((a, b) => a.number - b.number);
+
+  for (const pair of sortedPairs) {
+    if (pair.subgroup === subgroup || pair.subgroup === Esubgroup.common) {
       answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
       if (pair.removed) {
         answer += pairCanceled;
@@ -35,5 +31,6 @@ export default (timetable, subgroup) => {
       }
     }
   }
+
   return answer;
 };
