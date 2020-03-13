@@ -25,9 +25,9 @@ export default (timetable, subgroup) => {
       } else if (pair.error) {
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
       } else {
-        answer += `${pair.name} 🎓${pair.teacher} ${
-          pair.classroom === "" ? "" : "🚪"
-        }${pair.classroom}`;
+        answer += `${pair.name} ${pair.teacher ? `🎓${pair.teacher}` : ""} ${
+          pair.classroom ? `🚪${pair.classroom}` : ""
+        }`;
       }
     }
   }
