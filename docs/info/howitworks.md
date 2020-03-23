@@ -4,5 +4,6 @@
 
 **Будет написано чуть позже** (никогда)
 
-![](https://sun9-64.userapi.com/c849332/v849332637/13e4e2/43i0chUBvCo.jpg)
+![](../img/howitworks.jpg)
+
 [Автор картинки](https://vk.com/cnevermore)
