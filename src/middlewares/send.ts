@@ -50,13 +50,14 @@ export default (ctx, next) => {
         random_id: Date.now()
       });
     } catch (error) {
-      ctx.send(unexpectedError);
-      await sendAdmin(
-        ctx.bot,
-        `send error https://vk.com/id${ctx.message.peer_id}
+      // FIXME
+      if (!ctx.isChat)
+        await sendAdmin(
+          ctx.bot,
+          `send error https://vk.com/id${ctx.message.peer_id}
 ${msg}
 ${JSON.stringify(error)}`
-      );
+        );
     }
   };
   log.debug("Мидлварь send добавленна");
