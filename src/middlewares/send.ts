@@ -1,7 +1,7 @@
 import log from "../utils/log";
 import Ikeyboard, { color } from "../interfaces/keyboard";
 import sendAdmin from "../utils/sendAdmin";
-import { unexpectedError, timetableKey, helpKey, reportKey } from "../text";
+import { timetableKey, helpKey, reportKey } from "../text";
 
 export default (ctx, next) => {
   ctx.send = async (msg: string, keyboard: Array<Array<Ikeyboard>>) => {
