@@ -91,7 +91,7 @@ export const subgroupArg = {
 };
 
 export const helpAnswer = `Чтобы узнать расписание с заменами напишите команду "расписание" и отвечайте на вопросы бота.
-Если пара была заменена, то рядом с ней будет значок карандаша ✏`;
+Подробная справка: https://mpk.ivanik.ru`;
 
 export const timetableForGroup = (
   date: string,
@@ -107,8 +107,10 @@ export const pairCanceled = `Пара отменена ❌`;
 export const firstSubgroup = `первой`;
 export const secondSubgroup = `второй`;
 
-export const timetableKey = `Расписание`;
-export const helpKey = `Справка`;
+export const timetableKey = "Расписание";
+export const teacherKey = "Преподаватель";
+export const notifyKey = "Уведомления";
+export const helpKey = "Справка";
 export const reportKey = "💢Сообщить об ошибке";
 
 export const cancelKey = `Отмена`;
