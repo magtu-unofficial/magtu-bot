@@ -6,7 +6,7 @@ import { port, confirm, token, secret, notifySecret } from "./utils/config";
 import middlewares from "./middlewares";
 import commands from "./commands";
 import log from "./utils/log";
-import { cmdNotFound } from "./text";
+import { cmdNotFound, newChanges } from "./text";
 import User from "./models/user";
 import sendMany from "./utils/sendMany";
 
@@ -36,7 +36,7 @@ app.get("/notify", async (req, res) => {
   if (req.query.secret === notifySecret) {
     res.send("ok");
     const list = await User.getNotifyList();
-    await sendMany(bot, list, `Вышли новые замены. ${req.query.text || ""}`);
+    await sendMany(bot, list, `${newChanges} ${req.query.text || ""}`);
   } else {
     res.send("Wrong secret");
   }
