@@ -1,22 +1,20 @@
 import log from "../utils/log";
 import Ikeyboard, { color } from "../interfaces/keyboard";
 import sendAdmin from "../utils/sendAdmin";
-import { timetableKey, helpKey, reportKey } from "../text";
+import { reportKey } from "../text";
+import defaultKeyboard from "../templates/defaultKeyboard";
 
 export default (ctx, next) => {
   ctx.send = async (msg: string, keyboard: Array<Array<Ikeyboard>>) => {
-    const defaultKeyboard: Array<Array<Ikeyboard>> = [
-      [
-        { label: timetableKey, color: color.primary },
-        { label: helpKey, color: color.default }
-      ]
-    ];
     const now = new Date();
+    const sendKeyboard = keyboard || [...defaultKeyboard];
+
     if (
-      !ctx.session.lastReport ||
-      now.getTime() - ctx.session.lastReport.getTime() > 86400000
+      !keyboard &&
+      (!ctx.session.lastReport ||
+        now.getTime() - ctx.session.lastReport.getTime() > 86400000)
     ) {
-      defaultKeyboard.push([
+      sendKeyboard.push([
         {
           label: reportKey,
           color: color.default,
@@ -27,7 +25,7 @@ export default (ctx, next) => {
 
     const keyboardJSON = JSON.stringify({
       one_time: true,
-      buttons: (keyboard || defaultKeyboard).map(row => {
+      buttons: sendKeyboard.map(row => {
         return row.map(key => {
           return {
             action: {

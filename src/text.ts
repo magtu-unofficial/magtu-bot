@@ -86,8 +86,8 @@ export const subgroupArg = {
   firstSubgroupKey: "Первая",
   secondSubgroupKey: "Вторая",
 
-  firstSubgroupRegexp: /1|перв|один/i,
-  secondSubgroupRegexp: /2|втор|два/i
+  firstSubgroupRegexp: /1|перв|один|first/i,
+  secondSubgroupRegexp: /2|втор|два|second/i
 };
 
 export const helpAnswer = `Чтобы узнать расписание с заменами напишите команду "расписание" и отвечайте на вопросы бота.

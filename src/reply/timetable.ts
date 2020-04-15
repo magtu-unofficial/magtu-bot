@@ -3,6 +3,27 @@ import Timetable from "../models/timetable";
 import timetableOneDay from "../templates/timetableOneDay";
 import dateTemplate from "../templates/date";
 import { timetableNotFound } from "../text";
+import { color } from "../interfaces/keyboard";
+import defaultKeyboard from "../templates/defaultKeyboard";
+
+const keyboard = (group: string, subgroup: Esubgroup) => {
+  const keys = [...defaultKeyboard];
+
+  keys.push([
+    {
+      label: `${group} на сегодня`,
+      color: color.default,
+      payload: { command: `расписание сегодня ${group} ${subgroup}` }
+    },
+    {
+      label: `${group} на завтра`,
+      color: color.default,
+      payload: { command: `расписание завтра ${group} ${subgroup}` }
+    }
+  ]);
+
+  return keys;
+};
 
 export default async (
   ctx: any,
@@ -28,14 +49,17 @@ export default async (
         for (const day of days) {
           answer += `${timetableOneDay(day, subgroup)}\n\n`;
         }
-        ctx.send(answer);
+        ctx.send(answer, keyboard(days[0].displayName, subgroup));
       } else {
         throw Error("Not found");
       }
     } else {
       const day = await Timetable.findOne({ date, group });
       if (day) {
-        ctx.send(timetableOneDay(day, subgroup));
+        ctx.send(
+          timetableOneDay(day, subgroup),
+          keyboard(day.displayName, subgroup)
+        );
       } else {
         throw Error("Not found");
       }
