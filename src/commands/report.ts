@@ -1,9 +1,9 @@
 import Command from "./command";
 import reportText from "../args/reportText";
 import sendAdmin from "../utils/sendAdmin";
-import { reportthanks } from "../text";
+import { reportthanks, reportCmd } from "../text";
 
-const cmd = new Command("report", /ошибка|report/i, [reportText], async ctx => {
+const cmd = new Command("report", reportCmd, [reportText], async ctx => {
   ctx.session.lastReport = new Date();
   await ctx.send(reportthanks);
   await sendAdmin(

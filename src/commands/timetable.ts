@@ -3,10 +3,11 @@ import date from "../args/date";
 import group from "../args/group";
 import subgroup from "../args/subgroup";
 import timetable from "../reply/timetable";
+import { timetableCmd } from "../text";
 
 const cmd = new Command(
   "timetable",
-  /Расп/i,
+  timetableCmd,
   [date, group, subgroup],
   async ctx => {
     const { args } = ctx.session;
