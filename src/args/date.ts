@@ -78,7 +78,7 @@ export default {
   ...dateArg,
   keyboard: [
     [
-      { label: dateArg.yesterdayKey, color: color.default },
+      { label: dateArg.allKey, color: color.default },
       { label: dateArg.todayKey, color: color.default },
       { label: dateArg.tomorrowKey, color: color.default }
     ],
