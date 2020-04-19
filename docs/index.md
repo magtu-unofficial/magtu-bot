@@ -16,4 +16,4 @@
 - [Расписание](cmd/timetable.md)
 - [Преподаватель](cmd/teacher.md)
 - [Уведомления](cmd/notify.md)
-- [Сообщение об ошибку](cmd/report.md)
+- [Сообщение об ошибке](cmd/report.md)
