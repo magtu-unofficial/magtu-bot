@@ -1,7 +1,10 @@
+import { Next } from "koa";
+import { Ictx } from "../lib/bot";
+
 import log from "../utils/log";
 
-export default (ctx: any, next: any) => {
-  const { peer_id: peerId, text } = ctx.message;
-  log.info(`${peerId}: ${text}`);
+// TODO: Лог ответа на сообщение, время обработки
+export default (ctx: Ictx, next: Next) => {
+  log.info(`${ctx.chat}: ${ctx.text}`);
   next();
 };

@@ -1,46 +1,18 @@
-import Express from "express";
-import bodyParser from "body-parser";
-import Bot from "node-vk-bot-api";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
 
-import { port, confirm, token, secret, notifySecret } from "./utils/config";
-import middlewares from "./middlewares";
-import commands from "./commands";
+import Vk from "./lib/vk";
+
+import { port, confirm, token, secret } from "./utils/config";
+import { generic } from "./middlewares";
 import log from "./utils/log";
-import { cmdNotFound, newChanges } from "./text";
-import User from "./models/user";
-import sendMany from "./utils/sendMany";
 
-const app = Express();
-const bot = new Bot({
-  confirmation: confirm,
-  token,
-  secret
-});
+const app = new Koa();
+app.use(bodyParser());
 
-middlewares(bot);
-commands(bot);
-
-bot.on(async ctx => {
-  ctx.send(cmdNotFound);
-});
-
-app.use(bodyParser.json());
-
-app.post("/", bot.webhookCallback);
-
-app.get("/", (req, res) => {
-  res.send("ok");
-});
-
-app.get("/notify", async (req, res) => {
-  if (req.query.secret === notifySecret) {
-    res.send("ok");
-    const list = await User.getNotifyList();
-    await sendMany(bot, list, `${newChanges} ${req.query.text || ""}`);
-  } else {
-    res.send("Wrong secret");
-  }
-});
+const vk = new Vk({ confirm, token, secret, path: "/" });
+vk.use(...generic);
+app.use(vk.koaMiddleware());
 
 app.listen(port, () => {
   log.info(`Бот запущен на порту ${port}`);

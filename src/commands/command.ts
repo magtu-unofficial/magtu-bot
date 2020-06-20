@@ -1,4 +1,3 @@
-import Scene from "node-vk-bot-api/lib/scene";
 import { argsError } from "../text";
 import Iarg from "../interfaces/arg";
 
@@ -16,37 +15,7 @@ class Command {
     this.done = done;
     this.maxArgs = maxArgs;
 
-    const scene = this.args.map((arg, index) => {
-      return async (ctx: any) => {
-        if (ctx.canceled) {
-          ctx.scene.leave();
-        } else {
-          ctx.session.args[index] = arg.parser(ctx.message.text);
-
-          if (ctx.session.args[index] !== undefined) {
-            if (index === args.length - 1) {
-              ctx.scene.leave();
-              await this.done(ctx);
-            } else {
-              ctx.scene.next();
-              ctx.send(args[index + 1].query, args[index + 1].keyboard);
-            }
-          } else {
-            // Повторный запрос
-            ctx.send(arg.error, arg.keyboard);
-          }
-        }
-      };
-    });
-
-    this.scene = new Scene(
-      this.name,
-      (ctx: any) => {
-        ctx.scene.next();
-        ctx.send(args[0].query, args[0].keyboard);
-      },
-      ...scene
-    );
+    // FIXME: Сцены
   }
 
   add = (bot: any) => {
@@ -100,7 +69,6 @@ class Command {
   regexp: RegExp;
   args: Array<Iarg>;
   done: (ctx: any) => void;
-  scene: Scene;
   maxArgs: number;
 }
 
