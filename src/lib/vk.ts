@@ -61,12 +61,12 @@ class Vk extends Bot {
     const body = new URLSearchParams({
       v: API_VERSION,
       access_token: this.config.token,
-      ...parameters,
+      ...parameters
     });
 
     const req = await fetch(`${API_URL}/method/${method}`, {
       method: "POST",
-      body,
+      body
     });
     const res = await req.json();
     if (res.error) {
@@ -79,7 +79,7 @@ class Vk extends Bot {
       random_id: Date.now(),
       peer_id: peer,
       message,
-      ...params,
+      ...params
     });
   }
 
@@ -93,7 +93,7 @@ class Vk extends Bot {
       user: msg.peer_id,
       isChat: msg.from_id !== msg.peer_id,
       text: msg.text,
-      platform: "vk",
+      platform: "vk"
     };
   };
 
