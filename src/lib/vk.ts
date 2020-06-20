@@ -72,6 +72,7 @@ class Vk extends Bot {
     if (res.error) {
       throw Error(res.error.error_msg);
     }
+    return res.response;
   }
 
   async sendMessage(peer: number, message: string, params = {}) {
@@ -89,8 +90,8 @@ class Vk extends Bot {
       bot: this,
       message: msg,
       clientInfo: body.object.client_info,
-      chat: msg.from_id,
-      user: msg.peer_id,
+      chat: msg.peer_id,
+      user: msg.from_id,
       isChat: msg.from_id !== msg.peer_id,
       text: msg.text,
       platform: "vk"

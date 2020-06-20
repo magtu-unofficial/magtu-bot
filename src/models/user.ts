@@ -1,7 +1,7 @@
 import mongoose from "../utils/mongoose";
 
 const user = new mongoose.Schema({
-  id: Number,
+  id: String,
   notify: Boolean,
   data: Object
 });
@@ -40,8 +40,8 @@ interface IuserDocument extends mongoose.Document {
 }
 
 interface IuserModel extends mongoose.Model<IuserDocument> {
-  get(id: number): Promise<any>;
-  set(id: number, data: any): Promise<void>;
+  get(id: string): Promise<any>;
+  set(id: string, data: any): Promise<void>;
   setNotify(id: number, enable: boolean): Promise<void>;
   getNotifyList(): Promise<Array<number>>;
 }

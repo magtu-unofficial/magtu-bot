@@ -2,15 +2,16 @@ import { Next } from "koa";
 import compose from "koa-compose";
 
 export interface Ictx {
-  chat: number;
+  chat?: number;
   user: number;
-  isChat: boolean;
+  isChat?: boolean;
   text: string;
+  resonse?: string;
   platform: string;
   [key: string]: any;
 }
 
-export type Middleware = (ctx: Ictx, next: Next) => void;
+export type Middleware = (ctx: Ictx, next?: Next) => void | Promise<void>;
 
 class Bot {
   use(...fn: Array<Middleware>) {
