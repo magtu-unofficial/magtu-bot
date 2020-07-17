@@ -1,12 +1,13 @@
+import Command from "./command";
 import Router from "./router";
 
 test("должен вызвать нужный middleware", () => {
-  const fn1 = jest.fn();
-  const fn2 = jest.fn();
+  const fn1 = jest.fn(async () => {});
+  const fn2 = jest.fn(async () => {});
 
-  const router = new Router();
-  router.add(/тест/i, fn1);
-  router.add(/аоаоа/i, fn2);
+  const router = new Router(() => {});
+  router.add(new Command(/тест/i, fn1));
+  router.add(new Command(/аоаоа/i, fn2));
 
   router.middleware(
     { platform: "test", user: 1, text: "тест" },

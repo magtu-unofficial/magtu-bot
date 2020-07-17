@@ -1,21 +1,29 @@
 import { Next } from "koa";
 import { Ictx, Middleware } from "./bot";
-
-interface Iroute {}
+import Command from "./command";
+import ArgsCommand from "./argsCommand";
 
 export default class Router {
-  add(regexp: RegExp, handler: Middleware) {
-    this.routes.push({ regexp, handler });
+  constructor(notfound: Middleware) {
+    this.notfound = notfound;
+  }
+
+  add(...cmd: Array<Command | ArgsCommand>) {
+    this.commands.push(...cmd);
   }
 
   middleware = async (ctx: Ictx, next: Next) => {
-    for (const route of this.routes) {
-      if (route.regexp.test(ctx.text)) {
-        await route.handler(ctx);
+    for (const command of this.commands) {
+      if (command.check(ctx.text)) {
+        // KEK нужно ли вызывать next тут или внутри обработчика?
+        await command.handler(ctx);
+        await next();
+        return;
       }
     }
+    await this.notfound(ctx);
     await next();
   };
-
-  routes: Array<{ regexp: RegExp; handler: Middleware }> = [];
+  notfound: Middleware;
+  commands: Array<Command | ArgsCommand> = [];
 }
