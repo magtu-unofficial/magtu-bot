@@ -7,14 +7,16 @@ import Vk from "./lib/vk";
 import { port, confirm, token, secret } from "./utils/config";
 import { generic } from "./middlewares";
 import log from "./utils/log";
+import timetable from "./commands/timetable";
 
 const app = new Koa();
 app.use(bodyParser());
 
-const router = new Router();
-router.add(/расписание/, ctx => {
-  ctx.response = "kek";
+const router = new Router(ctx => {
+  ctx.response = "Не найдено ничего";
 });
+
+router.add(timetable);
 
 const vk = new Vk({ confirm, token, secret, path: "/" });
 vk.use(...generic, router.middleware);

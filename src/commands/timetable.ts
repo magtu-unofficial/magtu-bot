@@ -1,12 +1,11 @@
-import Command from "./command";
+import ArgsCommand from "../lib/argsCommand";
 import date from "../args/date";
 import group from "../args/group";
 import subgroup from "../args/subgroup";
 import timetable from "../reply/timetable";
 import { timetableCmd } from "../text";
 
-const cmd = new Command(
-  "timetable",
+const cmd = new ArgsCommand(
   timetableCmd,
   [date, group, subgroup],
   async ctx => {

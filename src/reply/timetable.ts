@@ -49,24 +49,21 @@ export default async (
         for (const day of days) {
           answer += `${timetableOneDay(day, subgroup)}\n\n`;
         }
-        ctx.send(answer, keyboard(days[0].displayName, subgroup));
+        ctx.reply = answer; // , keyboard(days[0].displayName, subgroup));
       } else {
         throw Error("Not found");
       }
     } else {
       const day = await Timetable.findOne({ date, group });
       if (day) {
-        ctx.send(
-          timetableOneDay(day, subgroup),
-          keyboard(day.displayName, subgroup)
-        );
+        ctx.reply = timetableOneDay(day, subgroup); // , keyboard(day.displayName, subgroup));
       } else {
         throw Error("Not found");
       }
     }
   } catch (error) {
     if (error.message === "Not found") {
-      ctx.send(timetableNotFound(dateTemplate(date)));
+      ctx.reply = timetableNotFound(dateTemplate(date));
     }
   }
 };

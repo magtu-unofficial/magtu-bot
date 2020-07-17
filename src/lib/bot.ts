@@ -6,7 +6,7 @@ export interface Ictx {
   user: number;
   isChat?: boolean;
   text: string;
-  resonse?: string;
+  response?: string;
   platform: string;
   [key: string]: any;
 }

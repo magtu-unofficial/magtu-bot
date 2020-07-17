@@ -1,8 +1,8 @@
 import logger from "./logger";
 // import typing from "./typing";
 import payload from "./payload";
-// import args from "./args";
 import session from "./session";
+import args from "./args";
 // import chat from "./chat";
 // import session from "./session";
 // import cancel from "./cancel";
@@ -11,5 +11,5 @@ import session from "./session";
 
 // TODO перенести в index
 // TODO: Метрики
-export const generic = [logger, session];
+export const generic = [logger, session, args];
 export const vk = [payload];
