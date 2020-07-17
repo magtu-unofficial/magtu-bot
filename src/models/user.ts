@@ -1,4 +1,4 @@
-import mongoose from "../utils/mongoose";
+import mongoose from "mongoose";
 
 const user = new mongoose.Schema({
   id: String,

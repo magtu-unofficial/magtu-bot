@@ -3,7 +3,7 @@ import Command from "../lib/argsCommand";
 import { reportCmd, reportthanks } from "../text";
 import sendAdmin from "../utils/sendAdmin";
 
-const cmd = new Command(reportCmd, [reportText], async ctx => {
+export default new Command(reportCmd, [reportText], async ctx => {
   ctx.session.lastReport = new Date();
   ctx.response = reportthanks;
   await sendAdmin(
@@ -15,5 +15,3 @@ const cmd = new Command(reportCmd, [reportText], async ctx => {
     ${JSON.stringify(ctx.session)}`
   );
 });
-
-export default cmd;

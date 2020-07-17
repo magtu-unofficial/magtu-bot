@@ -16,15 +16,16 @@ export const teacherTemplate = (pairs: Array<Itpair>, d: Date) => {
   let answer = timetableForTeacher(dateTemplate(d), pairs[0].teacher);
 
   const sortedPairs = pairs.sort((a, b) => a.number - b.number);
-
+  // Отображение подгруппы
   for (const pair of sortedPairs) {
     if (!pair.removed) {
-      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
+      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""}`;
       if (pair.error) {
-        answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
+        // TODO исправить парсер для правильного парсинга строк
+        answer += `❓ ${pair.string.replace(/\r?\n/g, "")} - ${pair.group}`;
       } else {
-        answer += `${pair.name} - ${pair.group} ${
-          pair.classroom ? `🚪${pair.classroom}` : ""
+        answer += ` ${pair.name} - ${pair.group}${
+          pair.classroom ? ` 🚪${pair.classroom}` : ""
         }`;
       }
     }

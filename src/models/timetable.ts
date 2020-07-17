@@ -1,4 +1,4 @@
-import mongoose from "../utils/mongoose";
+import mongoose from "mongoose";
 import Ipair from "../interfaces/pair";
 
 const timetable = new mongoose.Schema({

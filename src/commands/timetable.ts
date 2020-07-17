@@ -1,6 +1,7 @@
 import dateArg from "../args/date";
 import groupArg from "../args/group";
 import subgroupArg from "../args/subgroup";
+import Ipair from "../interfaces/pair";
 import Esubgroup from "../interfaces/subgroup";
 import ArgsCommand from "../lib/argsCommand";
 import Timetable from "../models/timetable";
@@ -38,25 +39,34 @@ import {
 //   return keys;
 // };
 
-const timetableTemplate = (timetable, subgroup) => {
+export const timetableTemplate = (
+  date: Date,
+  displayName: string,
+  pairs: Array<Ipair>,
+  subgroup: Esubgroup
+) => {
   let answer = timetableForGroup(
-    dateTemplate(timetable.date),
-    timetable.displayName,
+    dateTemplate(date),
+    displayName,
     subgroup === "first" ? firstSubgroup : secondSubgroup
   );
 
-  const sortedPairs = timetable.pairs.sort((a, b) => a.number - b.number);
-
+  const sortedPairs = pairs.sort((a, b) => a.number - b.number);
+  // TODO отображение подруппы
   for (const pair of sortedPairs) {
-    if (pair.subgroup === subgroup || pair.subgroup === Esubgroup.common) {
-      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""} `;
+    if (
+      pair.subgroup === subgroup ||
+      pair.subgroup === Esubgroup.common ||
+      !pair.subgroup
+    ) {
+      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""}`;
       if (pair.removed) {
         answer += pairCanceled;
       } else if (pair.error) {
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
       } else {
-        answer += `${pair.name} ${pair.teacher ? `🎓${pair.teacher}` : ""} ${
-          pair.classroom ? `🚪${pair.classroom}` : ""
+        answer += ` ${pair.name}${pair.teacher ? ` 🎓${pair.teacher}` : ""}${
+          pair.classroom ? ` 🚪${pair.classroom}` : ""
         }`;
       }
     }
@@ -89,7 +99,12 @@ export default new ArgsCommand(
         let answer = "";
         if (days.length !== 0) {
           for (const day of days) {
-            answer += `${timetableTemplate(day, subgroup)}\n\n`;
+            answer += `${timetableTemplate(
+              day.date,
+              day.displayName,
+              day.pairs,
+              subgroup
+            )}\n\n`;
           }
           ctx.response = answer; // , keyboard(days[0].displayName, subgroup));
         } else {
@@ -98,7 +113,12 @@ export default new ArgsCommand(
       } else {
         const day = await Timetable.findOne({ date, group });
         if (day) {
-          ctx.response = timetableTemplate(day, subgroup); // , keyboard(day.displayName, subgroup));
+          ctx.response = timetableTemplate(
+            day.date,
+            day.displayName,
+            day.pairs,
+            subgroup
+          ); // , keyboard(day.displayName, subgroup));
         } else {
           throw Error("Not found");
         }

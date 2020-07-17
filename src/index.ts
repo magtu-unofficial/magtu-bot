@@ -1,27 +1,32 @@
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 
+import help from "./commands/help";
+import notify from "./commands/notify";
+import report from "./commands/report";
+import teacher from "./commands/teacher";
+import timetable from "./commands/timetable";
 import Router from "./lib/router";
 import Vk from "./lib/vk";
-
-import { port, confirm, token, secret } from "./utils/config";
 import { generic } from "./middlewares";
+import { confirm, port, secret, token } from "./utils/config";
 import log from "./utils/log";
-import timetable from "./commands/timetable";
+import mongoose from "./utils/mongoose";
 
 const app = new Koa();
 app.use(bodyParser());
 
 const router = new Router(ctx => {
-  ctx.response = "Не найдено ничего";
+  ctx.response = "TODO: Не найдено ничего";
 });
 
-router.add(timetable);
+router.add(timetable, teacher, help, notify, report);
 
 const vk = new Vk({ confirm, token, secret, path: "/" });
 vk.use(...generic, router.middleware);
 app.use(vk.koaMiddleware());
 
+log.debug(mongoose.version);
 app.listen(port, () => {
   log.info(`Бот запущен на порту ${port}`);
 });
