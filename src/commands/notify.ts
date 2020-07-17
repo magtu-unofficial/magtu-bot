@@ -1,15 +1,14 @@
-import Command from "../lib/argsCommand";
 import bool from "../args/bool";
+import Command from "../lib/argsCommand";
 import User from "../models/user";
-import { notifyEnabled, notifyDisabled, notifyCmd } from "../text";
+import { notifyCmd, notifyDisabled, notifyEnabled } from "../text";
 
-const cmd = new Command(notifyCmd, [bool], async ctx => {
-  await User.setNotify(ctx.message.peer_id, ctx.session.args[0]);
+export default new Command(notifyCmd, [bool], async ctx => {
+  // TODO добавить платформу
+  await User.setNotify(ctx.user, ctx.session.args[0]);
   if (ctx.session.args[0]) {
-    await ctx.send(notifyEnabled);
+    ctx.response = notifyEnabled;
   } else {
-    ctx.send(notifyDisabled);
+    ctx.response = notifyDisabled;
   }
 });
-
-export default cmd;
