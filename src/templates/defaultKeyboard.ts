@@ -1,6 +1,6 @@
 import { timetableKey, teacherKey, notifyKey, helpKey } from "../text";
 
-import Ikeyboard, { color } from "../interfaces/keyboard";
+import { Ikeyboard, color } from "../lib/bot";
 
 const keyboard: Array<Array<Ikeyboard>> = [
   [

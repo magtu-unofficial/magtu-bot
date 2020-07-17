@@ -4,40 +4,21 @@ import subgroupArg from "../args/subgroup";
 import Ipair from "../interfaces/pair";
 import Esubgroup from "../interfaces/subgroup";
 import ArgsCommand from "../lib/argsCommand";
+import { color } from "../lib/bot";
 import Timetable from "../models/timetable";
 import dateTemplate from "../templates/date";
+import defaultKeyboard from "../templates/defaultKeyboard";
 import numberToEmoji from "../templates/numberToEmoji";
 import {
   firstSubgroup,
   pairCanceled,
   secondSubgroup,
+  timetableButtonToday,
+  timetableButtonTomorrow,
   timetableCmd,
   timetableForGroup,
   timetableNotFound
 } from "../text";
-
-// TODO клавиатура
-// import { color } from "../interfaces/keyboard";
-// import defaultKeyboard from "../templates/defaultKeyboard";
-
-// const keyboard = (group: string, subgroup: Esubgroup) => {
-//   const keys = [...defaultKeyboard];
-
-//   keys.push([
-//     {
-//       label: `${group} на сегодня`,
-//       color: color.default,
-//       payload: { command: `расписание сегодня ${group} ${subgroup}` }
-//     },
-//     {
-//       label: `${group} на завтра`,
-//       color: color.default,
-//       payload: { command: `расписание завтра ${group} ${subgroup}` }
-//     }
-//   ]);
-
-//   return keys;
-// };
 
 export const timetableTemplate = (
   date: Date,
@@ -106,7 +87,7 @@ export default new ArgsCommand(
               subgroup
             )}\n\n`;
           }
-          ctx.response = answer; // , keyboard(days[0].displayName, subgroup));
+          ctx.response = answer;
         } else {
           throw Error("Not found");
         }
@@ -118,11 +99,25 @@ export default new ArgsCommand(
             day.displayName,
             day.pairs,
             subgroup
-          ); // , keyboard(day.displayName, subgroup));
+          );
         } else {
           throw Error("Not found");
         }
       }
+
+      ctx.keyboard = [...defaultKeyboard];
+      ctx.keyboard.push([
+        {
+          label: `${group}${timetableButtonToday}`,
+          color: color.default,
+          payload: { command: `расписание сегодня ${group} ${subgroup}` }
+        },
+        {
+          label: `${group}${timetableButtonTomorrow}`,
+          color: color.default,
+          payload: { command: `расписание завтра ${group} ${subgroup}` }
+        }
+      ]);
     } catch (error) {
       if (error.message === "Not found") {
         ctx.response = timetableNotFound(dateTemplate(date));

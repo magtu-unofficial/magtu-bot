@@ -1,5 +1,5 @@
 import { cancelKey, groupArg } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 export const parser = (str: string): string | undefined => {
   const group = str.match(/[А-Яа-я]{1,6}-\d{2}-\d/i);

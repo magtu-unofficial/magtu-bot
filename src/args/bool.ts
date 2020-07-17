@@ -1,5 +1,5 @@
 import { boolArg } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 export const parser = (str: string): boolean | undefined => {
   if (str.search(/вкл|да|on|true|1/i) !== -1) {

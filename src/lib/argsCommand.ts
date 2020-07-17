@@ -1,9 +1,9 @@
 import Command from "./command";
-import { Ictx } from "./bot";
+import { Ictx, Ikeyboard } from "./bot";
 
 export interface Iarg {
   query: string;
-  // keyboard: Array<Array<Ikeyboard>>; FIXME
+  keyboard?: Array<Array<Ikeyboard>>;
   parser: (str: string) => Promise<any> | any;
 }
 

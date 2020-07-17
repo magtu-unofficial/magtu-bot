@@ -93,6 +93,9 @@ export const subgroupArg = {
 export const timetableKey = "Расписание";
 export const timetableCmd = /расп|ti/i;
 
+export const timetableButtonToday = " на сегодня";
+export const timetableButtonTomorrow = " на завтра";
+
 export const timetableForGroup = (
   date: string,
   group: string,

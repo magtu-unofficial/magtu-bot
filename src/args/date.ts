@@ -1,5 +1,5 @@
 import { dateArg, cancelKey } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 export const parser = (
   str: string,

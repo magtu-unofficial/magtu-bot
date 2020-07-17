@@ -2,7 +2,7 @@ import Koa from "koa";
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
-import Bot, { Ictx } from "./bot";
+import Bot, { Ictx, Ikeyboard } from "./bot";
 
 interface IvkConfig {
   token: string;
@@ -27,14 +27,6 @@ class Vk extends Bot {
   }
 
   koaMiddleware() {
-    this.use(async (ctx, next) => {
-      await next();
-      if (!ctx.response) {
-        ctx.response = "Not found";
-      }
-      this.sendMessage(ctx.chat, ctx.response);
-    });
-
     const callback = this.getCallback();
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
@@ -75,11 +67,29 @@ class Vk extends Bot {
     return res.response;
   }
 
-  async sendMessage(peer: number, message: string, params = {}) {
+  async sendMessage(
+    peer: number,
+    message: string,
+    keyboard: Array<Array<Ikeyboard>>,
+    oneTime = true,
+    params = {}
+  ) {
+    const buttons = keyboard.map(i =>
+      i.map(j => ({
+        color: j.color,
+        action: {
+          type: "text",
+          payload: j.payload ? JSON.stringify(j.payload) : "{}",
+          label: j.label
+        }
+      }))
+    );
+
     await this.api("messages.send", {
       random_id: Date.now(),
       peer_id: peer,
       message,
+      keyboard: JSON.stringify({ buttons, one_time: oneTime }),
       ...params
     });
   }

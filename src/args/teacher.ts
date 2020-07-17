@@ -1,5 +1,5 @@
 import { cancelKey, teacherArg } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 export const parser = (str: string): string | undefined => {
   const teacher = str

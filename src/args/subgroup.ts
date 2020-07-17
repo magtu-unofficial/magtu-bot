@@ -1,5 +1,5 @@
 import Esubgroup from "../interfaces/subgroup";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 import { subgroupArg, cancelKey } from "../text";
 
 export const parser = (str: string): Esubgroup | undefined => {

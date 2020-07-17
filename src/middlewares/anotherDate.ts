@@ -1,5 +1,5 @@
 import { dateArg, cancelKey } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 // Костыль для вывода справки по форматам даты из любого места
 export default (ctx, next) => {
