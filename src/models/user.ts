@@ -29,9 +29,7 @@ user.statics.setNotify = async function setNotify(id: number, enable: boolean) {
 
 user.statics.getNotifyList = async function getNotifyList() {
   const doc = await this.find({ notify: { $eq: true } }, { id: true });
-  return doc.map(u => {
-    return u.id;
-  });
+  return doc.map((u: IuserDocument) => u.id);
 };
 
 interface IuserDocument extends mongoose.Document {

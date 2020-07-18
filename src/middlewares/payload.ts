@@ -1,4 +1,7 @@
-export default (ctx, next) => {
+import { Next } from "koa";
+import { Ictx } from "../lib/bot";
+
+export default (ctx: Ictx, next: Next) => {
   try {
     ctx.payload = JSON.parse(ctx.message.payload);
   } catch (error) {
@@ -6,7 +9,7 @@ export default (ctx, next) => {
   }
 
   if (ctx.payload.command) {
-    ctx.message.text = ctx.payload.command;
+    ctx.text = ctx.payload.command;
   }
 
   next();

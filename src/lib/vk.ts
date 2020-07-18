@@ -19,6 +19,7 @@ interface IvkCtx extends Ictx {
 
 const API_VERSION = "5.103";
 const API_URL = "https://api.vk.com";
+const CHUNK_SIZE = 100;
 
 class Vk extends Bot {
   constructor(config: IvkConfig) {
@@ -92,6 +93,19 @@ class Vk extends Bot {
       keyboard: JSON.stringify({ buttons, one_time: oneTime }),
       ...params
     });
+  }
+
+  async sendMessages(users: Array<number>, msg: string) {
+    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+      const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
+
+      await this.api("messages.send", {
+        user_ids: chunk,
+        message: msg,
+        dont_parse_links: 1,
+        random_id: Date.now()
+      });
+    }
   }
 
   createCtx = (body: any): IvkCtx => {

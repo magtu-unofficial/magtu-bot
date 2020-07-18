@@ -28,7 +28,7 @@ export interface Ictx {
 export type Middleware = (ctx: Ictx, next?: Next) => void | Promise<void>;
 
 class Bot {
-  setDefault(response: string, keyboard) {
+  setDefault(response: string, keyboard: Array<Array<Ikeyboard>>) {
     this.defaultResponse = response;
     this.defaultKeyboard = keyboard;
   }

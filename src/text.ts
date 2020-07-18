@@ -23,22 +23,22 @@ export const dateArg = {
   allKey: "Всё доступное",
   another: "Другая дата",
 
-  daysWeekRegExp: {
-    "0": /(вс|воскресенье)/i,
-    "1": /(пн|понедельник)/i,
-    "2": /(вт|вторник)/i,
-    "3": /(ср|сред[ау])/i,
-    "4": /(чт|четверг)/i,
-    "5": /(пт|пятниц[ау])/i,
-    "6": /(сб|суббот[ау])/i
-  },
-  daysRelativeRegExp: {
-    "-2": /позавчера/i,
-    "-1": /вчера/i,
-    "0": /сегодня/i,
-    "1": /завтра/i,
-    "2": /послезавтра/i
-  }
+  daysWeekRegExp: [
+    { day: 0, regexp: /(вс|воскресенье)/i },
+    { day: 1, regexp: /(пн|понедельник)/i },
+    { day: 2, regexp: /(вт|вторник)/i },
+    { day: 3, regexp: /(ср|сред[ау])/i },
+    { day: 4, regexp: /(чт|четверг)/i },
+    { day: 5, regexp: /(пт|пятниц[ау])/i },
+    { day: 6, regexp: /(сб|суббот[ау])/i }
+  ],
+  daysRelativeRegExp: [
+    { day: -2, regexp: /позавчера/i },
+    { day: -1, regexp: /вчера/i },
+    { day: 0, regexp: /сегодня/i },
+    { day: 1, regexp: /завтра/i },
+    { day: 2, regexp: /послезавтра/i }
+  ]
 };
 
 export const groupArg = {

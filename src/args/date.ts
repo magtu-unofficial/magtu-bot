@@ -33,38 +33,30 @@ export const parser = (str: string, from: Date = new Date()): Date | string => {
   }
 
   // Обработка дней недели
-  for (const key in dateArg.daysWeekRegExp) {
-    if ({}.hasOwnProperty.call(dateArg.daysWeekRegExp, key)) {
-      const element = dateArg.daysWeekRegExp[key];
-      const day = parseInt(key, 10);
-      if (str.search(element) === 0) {
-        const date = new Date(currentDate);
+  for (const i of dateArg.daysWeekRegExp) {
+    if (str.search(i.regexp) === 0) {
+      const date = new Date(currentDate);
 
-        // День на текущей или следующей неделе
-        if (day - currentDate.getDay() >= 0) {
-          // Разность текущего и необходимого дня прибавляется к
-          date.setDate(currentDate.getDate() + day - currentDate.getDay());
-        } else {
-          date.setDate(currentDate.getDate() + 7 - currentDate.getDay() + day);
-        }
-
-        return date;
+      // День на текущей или следующей неделе
+      if (i.day - currentDate.getDay() >= 0) {
+        // Разность текущего и необходимого дня прибавляется к
+        date.setDate(currentDate.getDate() + i.day - currentDate.getDay());
+      } else {
+        date.setDate(currentDate.getDate() + 7 - currentDate.getDay() + i.day);
       }
+
+      return date;
     }
   }
 
   // Обработка относительных дат
-  for (const key in dateArg.daysRelativeRegExp) {
-    if ({}.hasOwnProperty.call(dateArg.daysRelativeRegExp, key)) {
-      const element = dateArg.daysRelativeRegExp[key];
-      const day = parseInt(key, 10);
-      if (str.search(element) === 0) {
-        const date = new Date(currentDate);
+  for (const i of dateArg.daysRelativeRegExp) {
+    if (str.search(i.regexp) === 0) {
+      const date = new Date(currentDate);
 
-        date.setDate(currentDate.getDate() + day);
+      date.setDate(currentDate.getDate() + i.day);
 
-        return date;
-      }
+      return date;
     }
   }
 
