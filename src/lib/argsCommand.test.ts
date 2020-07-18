@@ -23,7 +23,7 @@ test("должен парсить аргументы без проблела", (
     text: "/test 22 fffFFF",
     platform: "text",
     user: 13245,
-    session: {},
+    session: { currentCommand: -1 },
     args: ["22", "fffFFF"]
   });
 });
@@ -52,7 +52,7 @@ test("должен парсить аргументы с пробелом", () =>
     text: "/test 22 fffFFF",
     platform: "text",
     user: 13245,
-    session: {},
+    session: { currentCommand: -1 },
     args: ["22", "fffFFF", "wat"]
   });
 });
@@ -83,7 +83,7 @@ test("должен возвращать ошибки", () => {
     text: "/test 22 fffFFF",
     platform: "text",
     user: 13245,
-    session: {},
+    session: { currentCommand: -1 },
     args: ["22", "fffFFF"]
   });
 });

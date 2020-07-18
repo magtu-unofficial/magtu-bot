@@ -15,6 +15,7 @@ export interface Ikeyboard {
 export interface Ictx {
   chat?: number;
   user: number;
+  name?: string;
   isChat?: boolean;
   text: string;
   response?: string;

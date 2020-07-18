@@ -33,14 +33,17 @@ export const timetableTemplate = (
   );
 
   const sortedPairs = pairs.sort((a, b) => a.number - b.number);
-  // TODO отображение подруппы
   for (const pair of sortedPairs) {
     if (
       pair.subgroup === subgroup ||
       pair.subgroup === Esubgroup.common ||
       !pair.subgroup
     ) {
-      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""}`;
+      answer += `\n${numberToEmoji(pair.number)}${
+        pair.subgroup === Esubgroup.first || pair.subgroup === Esubgroup.second
+          ? "➡️"
+          : ""
+      }${pair.changed ? "✏" : ""}`;
       if (pair.removed) {
         answer += pairCanceled;
       } else if (pair.error) {

@@ -1,3 +1,4 @@
+import { tooManyArgs } from "../text";
 import Command from "./command";
 import { Ictx, Ikeyboard } from "./bot";
 
@@ -50,10 +51,9 @@ export default class ArgsCommand extends Command {
       } catch (error) {
         ctx.response = error.message;
         ctx.keyboard = this.args[ctx.session.currentArg].keyboard;
-      } finally {
-        if (ctx.session.currentCommand === -1) {
-          await this.done(ctx);
-        }
+      }
+      if (ctx.session.currentCommand === -1) {
+        await this.done(ctx);
       }
     } else if (argsCount === 0) {
       // Начало диалога
@@ -89,6 +89,8 @@ export default class ArgsCommand extends Command {
       } else {
         ctx.response = errors.join("\n");
       }
+    } else {
+      ctx.response = tooManyArgs;
     }
   };
 

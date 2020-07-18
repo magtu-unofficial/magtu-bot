@@ -130,7 +130,7 @@ export const cancelKey = `Отмена`;
 export const canceled = `Отменено.
 Если у вас возникли проблемы при использовании бота напишите сюда https://vk.com/ivanik7`;
 
-export const argsError = `❌Неправельное число аргументов. Для справки напишите "Справка"`;
+export const tooManyArgs = `❌Слишком много аргументов`;
 
 export const unexpectedError = `❌Произошла неизвестная ошибка. Повторите попытку позже`;
 
