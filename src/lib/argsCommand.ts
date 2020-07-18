@@ -23,15 +23,43 @@ export default class ArgsCommand extends Command {
     this.maxArgs = maxArgs;
   }
 
+  responseArg(ctx: Ictx, argId: number): void {
+    ctx.session.currentArg = argId;
+    ctx.response = this.args[argId].query;
+    ctx.keyboard = this.args[argId].keyboard;
+  }
+
   handler = async (ctx: Ictx) => {
     const argsCount: number = ctx.args.length;
     if (!ctx.session.args) {
       ctx.session.args = [];
     }
 
-    if (argsCount === 0) {
-      // TODO dialog
+    if (ctx.session && ctx.session.currentCommand !== -1) {
+      // Внутри диалога
+      try {
+        ctx.session.args[ctx.session.currentArg] = await this.args[
+          ctx.session.currentArg
+        ].parser(ctx.text);
+
+        if (ctx.session.currentArg < this.args.length - 1) {
+          this.responseArg(ctx, ctx.session.currentArg + 1);
+        } else {
+          ctx.session.currentCommand = -1;
+        }
+      } catch (error) {
+        ctx.response = error.message;
+      } finally {
+        if (ctx.session.currentCommand === -1) {
+          await this.done(ctx);
+        }
+      }
+    } else if (argsCount === 0) {
+      // Начало диалога
+      ctx.session.currentCommand = this.id;
+      this.responseArg(ctx, 0);
     } else if (argsCount <= this.maxArgs) {
+      // Одной строкой
       const errors: Array<string> = [];
       const lastArgWithSpace = ctx.args.length !== this.args.length;
 
@@ -60,8 +88,6 @@ export default class ArgsCommand extends Command {
       } else {
         ctx.response = errors.join("\n");
       }
-    } else {
-      ctx.response = "FIXME argsError";
     }
   };
 

@@ -9,5 +9,6 @@ export default class Command {
   }
 
   regexp: RegExp;
+  id: number;
   handler: (ctx: any) => Promise<void> | void;
 }

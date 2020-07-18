@@ -12,18 +12,39 @@ export default class Router {
     this.commands.push(...cmd);
   }
 
-  middleware = async (ctx: Ictx, next: Next) => {
-    for (const command of this.commands) {
-      if (command.check(ctx.text)) {
-        // KEK нужно ли вызывать next тут или внутри обработчика?
+  middleware = () => {
+    for (const [iterator, value] of this.commands.entries()) {
+      value.id = iterator;
+    }
+
+    return async (ctx: Ictx, next: Next) => {
+      if (
+        ctx.session &&
+        (ctx.session.currentCommand === undefined ||
+          ctx.session.currentCommand === null)
+      ) {
+        ctx.session.currentCommand = -1;
+      }
+
+      if (!ctx.session || ctx.session.currentCommand === -1) {
+        for (const command of this.commands) {
+          if (command.check(ctx.text)) {
+            await command.handler(ctx);
+            await next();
+            return;
+          }
+        }
+      } else {
+        const command = this.commands[ctx.session.currentCommand];
         await command.handler(ctx);
         await next();
         return;
       }
-    }
-    await this.notfound(ctx);
-    await next();
+      await this.notfound(ctx);
+      await next();
+    };
   };
+
   notfound: Middleware;
   commands: Array<Command | ArgsCommand> = [];
 }

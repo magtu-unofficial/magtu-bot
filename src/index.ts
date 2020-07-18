@@ -26,7 +26,7 @@ router.add(timetable, teacher, help, notify, report);
 
 const vk = new Vk({ confirm, token, secret, path: "/" });
 vk.setDefault(unexpectedError, defaultKeyboard);
-vk.use(...generic, router.middleware);
+vk.use(...generic, router.middleware());
 app.use(vk.koaMiddleware());
 
 log.debug(mongoose.version);
