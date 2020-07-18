@@ -1,10 +1,7 @@
 import { dateArg, cancelKey } from "../text";
 import { color } from "../lib/bot";
 
-export const parser = (
-  str: string,
-  from: Date = new Date()
-): Date | string | undefined => {
+export const parser = (str: string, from: Date = new Date()): Date | string => {
   if (str.search(/Вс(ё|е)|all/i) !== -1) {
     return "all";
   }
@@ -71,11 +68,16 @@ export const parser = (
     }
   }
 
-  return undefined;
+  // Вывод справки
+  if (str === dateArg.another) {
+    throw Error(dateArg.anotherText);
+  }
+
+  throw Error(dateArg.error);
 };
 
 export default {
-  ...dateArg,
+  query: dateArg.query,
   keyboard: [
     [
       { label: dateArg.allKey, color: color.default },

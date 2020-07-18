@@ -2,7 +2,7 @@ import Esubgroup from "../interfaces/subgroup";
 import { color } from "../lib/bot";
 import { subgroupArg, cancelKey } from "../text";
 
-export const parser = (str: string): Esubgroup | undefined => {
+export const parser = (str: string): Esubgroup => {
   const lowStr = str.toLowerCase();
   if (lowStr.search(subgroupArg.firstSubgroupRegexp) === 0) {
     return Esubgroup.first;
@@ -10,11 +10,11 @@ export const parser = (str: string): Esubgroup | undefined => {
   if (lowStr.search(subgroupArg.secondSubgroupRegexp) === 0) {
     return Esubgroup.second;
   }
-  return undefined;
+  throw Error(subgroupArg.error);
 };
 
 export default {
-  ...subgroupArg,
+  query: subgroupArg.query,
   keyboard: [
     [
       { label: subgroupArg.firstSubgroupKey, color: color.default },

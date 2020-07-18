@@ -106,7 +106,9 @@ describe("Относительные слова", () => {
 
 describe("Неверные строки", () => {
   test("бред", () => {
-    expect(parser("бред")).toBeUndefined();
+    expect(() => {
+      parser("бред");
+    }).toThrow("Дата введена не верно.");
   });
 });
 

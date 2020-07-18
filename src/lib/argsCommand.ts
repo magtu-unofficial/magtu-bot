@@ -49,6 +49,7 @@ export default class ArgsCommand extends Command {
         }
       } catch (error) {
         ctx.response = error.message;
+        ctx.keyboard = this.args[ctx.session.currentArg].keyboard;
       } finally {
         if (ctx.session.currentCommand === -1) {
           await this.done(ctx);

@@ -1,7 +1,7 @@
 import { cancelKey, teacherArg } from "../text";
 import { color } from "../lib/bot";
 
-export const parser = (str: string): string | undefined => {
+export const parser = (str: string): string => {
   const teacher = str
     .toLowerCase()
     .match(/([а-яё]{3,})( ([а-яё])\.? ?([а-яё]))?/i);
@@ -11,11 +11,11 @@ export const parser = (str: string): string | undefined => {
     }
     return teacher[1];
   }
-  return undefined;
+  throw Error(teacherArg.error);
 };
 
 export default {
-  ...teacherArg,
+  query: teacherArg.query,
   keyboard: [[{ label: cancelKey, color: color.negative }]],
   parser
 };
