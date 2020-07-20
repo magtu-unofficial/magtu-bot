@@ -11,9 +11,11 @@ import Vk from "./lib/vk";
 import middlewares from "./middlewares";
 import defaultKeyboard from "./templates/defaultKeyboard";
 import { cmdNotFound, unexpectedError } from "./text";
-import { confirm, port, secret, token } from "./utils/config";
+// import { vkConfirm, port, vkSecret, vkToken } from "./utils/config";
+import { port, tgToken, tgUrl } from "./utils/config";
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
+import Telegram from "./lib/telegram";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -24,10 +26,24 @@ const router = new Router(ctx => {
 
 router.add(timetable, teacher, help, notify, report);
 
-const vk = new Vk({ confirm, token, secret, path: "/" });
+middlewares.push(router.middleware());
+
+const vk = new Vk({
+  confirm: vkConfirm,
+  token: vkToken,
+  secret: vkSecret,
+  path: "/"
+});
 vk.setDefault(unexpectedError, defaultKeyboard);
-vk.use(...middlewares, router.middleware());
+vk.use(...middlewares);
 app.use(vk.koaMiddleware());
+log.info("VK done");
+
+const telegram = new Telegram({ token: tgToken, path: "/", url: tgUrl });
+telegram.setDefault(unexpectedError, defaultKeyboard);
+telegram.use(...middlewares);
+app.use(telegram.koaMiddleware());
+log.info("Telegram done");
 
 log.debug(mongoose.version);
 app.listen(port, () => {
