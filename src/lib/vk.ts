@@ -20,6 +20,21 @@ interface IvkCtx extends Ictx {
 const API_VERSION = "5.103";
 const API_URL = "https://api.vk.com";
 const CHUNK_SIZE = 100;
+const CHAT = 2000000000;
+const CHAT_MENTION = /\[club\d+?\|.+?\] /;
+
+export const isOurMessage = (body: any) => {
+  const msg = body.object.message;
+  if (msg.peer_id < CHAT) return true;
+
+  if (msg.text.indexOf("/") === 0 || msg.text.search(CHAT_MENTION) !== -1) {
+    msg.text = msg.text.replace("/", "");
+    msg.text = msg.text.replace(CHAT_MENTION, "");
+    return true;
+  }
+
+  return false;
+};
 
 class Vk extends Bot {
   constructor(config: IvkConfig) {
@@ -38,7 +53,9 @@ class Vk extends Bot {
       ) {
         if (ctx.request.body.type === "message_new") {
           // TODO: trycatch
-          await callback(this.createCtx(ctx.request.body));
+          if (isOurMessage(ctx.request.body)) {
+            await callback(this.createCtx(ctx.request.body));
+          }
           ctx.body = "ok";
           await next();
         }
@@ -110,6 +127,17 @@ class Vk extends Bot {
 
   createCtx = (body: any): IvkCtx => {
     const msg = body.object.message;
+
+    let text: string;
+
+    if (msg.reply_message) {
+      text = msg.reply_message.text;
+    } else if (msg.fwd_messages && msg.fwd_messages.length > 0) {
+      text = msg.fwd_messages[0].text;
+    } else {
+      text = msg.text;
+    }
+
     return {
       bot: this,
       message: msg,
@@ -117,7 +145,7 @@ class Vk extends Bot {
       chat: msg.peer_id,
       user: msg.from_id,
       isChat: msg.from_id !== msg.peer_id,
-      text: msg.text,
+      text,
       platform: "vk"
     };
   };
