@@ -28,35 +28,15 @@ export interface Ictx {
 export type Middleware = (ctx: Ictx, next?: Next) => void | Promise<void>;
 
 class Bot {
-  setDefault(response: string, keyboard: Array<Array<Ikeyboard>>) {
-    this.defaultResponse = response;
-    this.defaultKeyboard = keyboard;
-  }
-
   use(...fn: Array<Middleware>) {
     this.middlewares.push(...fn);
   }
 
   getCallback(): (ctx: Ictx) => Promise<void> {
-    this.use(async (ctx, next) => {
-      await next();
-
-      this.sendMessage(
-        ctx.chat,
-        ctx.response || this.defaultResponse,
-        ctx.keyboard || this.defaultKeyboard,
-        ctx.oneTime || false,
-        ctx.params || {}
-      );
-    });
-
     const fn = compose(this.middlewares);
     const handle = (ctx: Ictx) => fn(ctx);
     return handle;
   }
-
-  defaultResponse: string = "Error";
-  defaultKeyboard: Array<Array<Ikeyboard>> = [[]];
 
   middlewares: Array<Middleware> = [];
   sendMessage?(

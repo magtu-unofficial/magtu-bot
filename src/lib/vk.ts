@@ -43,6 +43,18 @@ class Vk extends Bot {
   }
 
   koaMiddleware() {
+    this.use(async (ctx, next) => {
+      await next();
+
+      this.sendMessage(
+        ctx.chat,
+        ctx.response,
+        ctx.keyboard,
+        ctx.oneTime,
+        ctx.params
+      );
+    });
+
     const callback = this.getCallback();
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {

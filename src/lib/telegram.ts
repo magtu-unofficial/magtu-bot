@@ -18,6 +18,31 @@ interface ItelegtamCtx extends Ictx {
 
 const API_URL = "https://api.telegram.org";
 
+const sendMessageParams = (
+  peer: number,
+  message: string,
+  keyboard: Array<Array<Ikeyboard>>,
+  oneTime = true,
+  params = {}
+) => {
+  const buttons = keyboard.map(i =>
+    i.map(j => ({
+      text: j.label
+    }))
+  );
+
+  return {
+    chat_id: peer,
+    text: message,
+    reply_markup: {
+      resize_keyboard: true,
+      one_time_keyboard: oneTime,
+      keyboard: buttons
+    },
+    ...params
+  };
+};
+
 class Telegram extends Bot {
   constructor(config: ItelegtamConfig) {
     super();
@@ -35,8 +60,16 @@ class Telegram extends Bot {
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
       if (ctx.method === "POST" && ctx.url === this.config.path) {
-        await callback(this.createCtx(ctx.request.body));
-        ctx.body = "ok";
+        const botCtx = this.createCtx(ctx.request.body);
+        await callback(botCtx);
+        ctx.body = sendMessageParams(
+          botCtx.user,
+          botCtx.response,
+          botCtx.keyboard,
+          botCtx.oneTime,
+          botCtx.params
+        );
+        ctx.body.method = "sendMessage";
         await next();
       } else {
         await next();
@@ -73,36 +106,24 @@ class Telegram extends Bot {
     oneTime = true,
     params = {}
   ) {
-    // const buttons = keyboard.map(i =>
-    //   i.map(j => ({
-    //     color: j.color,
-    //     action: {
-    //       type: "text",
-    //       payload: j.payload ? JSON.stringify(j.payload) : "{}",
-    //       label: j.label
-    //     }
-    //   }))
-    // );
-
-    await this.api("sendMessage", {
-      chat_id: peer,
-      text: message,
-      // keyboard: JSON.stringify({ buttons, one_time: oneTime }),
-      ...params
-    });
+    await this.api(
+      "sendMessage",
+      sendMessageParams(peer, message, keyboard, oneTime, params)
+    );
   }
 
-  async sendMessages(users: Array<number>, msg: string) {
-    // for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-    //   const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
-    //   await this.api("messages.send", {
-    //     user_ids: chunk,
-    //     message: msg,
-    //     dont_parse_links: 1,
-    //     random_id: Date.now()
-    //   });
-    // }
-  }
+  // TODO
+  // async sendMessages(users: Array<number>, msg: string) {
+  //   // for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+  //   //   const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
+  //   //   await this.api("messages.send", {
+  //   //     user_ids: chunk,
+  //   //     message: msg,
+  //   //     dont_parse_links: 1,
+  //   //     random_id: Date.now()
+  //   //   });
+  //   // }
+  // }
 
   createCtx = (body: any): ItelegtamCtx => {
     const msg = body.message;
