@@ -16,12 +16,15 @@ import {
   vkConfirm,
   tgToken,
   tgUrl,
+  viberToken,
+  viberUrl,
   port
 } from "./utils/config";
 
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
 import Telegram from "./lib/telegram";
+import Viber from "./lib/viber";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -48,6 +51,16 @@ const telegram = new Telegram({ token: tgToken, path: "/", url: tgUrl });
 telegram.use(...middlewares);
 app.use(telegram.koaMiddleware());
 log.info("Telegram done");
+
+const viber = new Viber({ token: viberToken, url: viberUrl, path: "/" });
+viber.use(...middlewares);
+app.use(viber.koaMiddleware());
+
+app.use(ctx => {
+  if (ctx.method === "GET") {
+    ctx.body = "Че ты тут забыл?";
+  }
+});
 
 log.debug(mongoose.version);
 app.listen(port, () => {

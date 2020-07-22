@@ -11,6 +11,9 @@ export const vkSecret = process.env.VK_SECRET;
 export const tgToken = process.env.TG_TOKEN;
 export const tgUrl = process.env.TG_URL;
 
+export const viberToken = process.env.VIBER_TOKEN;
+export const viberUrl = process.env.VIBER_URL;
+
 export const chatSign = process.env.CHAT_SIGN;
 export const mongoUri = process.env.MONGO_URI;
 export const adminId = process.env.ADMIN_ID;

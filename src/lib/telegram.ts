@@ -13,6 +13,7 @@ interface ItelegtamConfig {
 
 interface ItelegtamCtx extends Ictx {
   platform: "telegram";
+  user: number;
   message: any;
 }
 
@@ -55,7 +56,7 @@ class Telegram extends Bot {
     // FIXME добавить токен
     this.api("setWebhook", {
       url: this.config.url,
-      allowed_updates: ["message"]
+      allowed_updates: ["message", "inline_query"]
     });
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {

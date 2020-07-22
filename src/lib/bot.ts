@@ -13,8 +13,8 @@ export interface Ikeyboard {
   color: color;
 }
 export interface Ictx {
-  chat?: number;
-  user: number;
+  chat?: number | string;
+  user: number | string;
   name?: string;
   isChat?: boolean;
   text: string;
@@ -40,7 +40,7 @@ class Bot {
 
   middlewares: Array<Middleware> = [];
   sendMessage?(
-    peer: number,
+    peer: number | string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
     oneTime: boolean,

@@ -13,6 +13,7 @@ interface IvkConfig {
 
 interface IvkCtx extends Ictx {
   platform: "vk";
+  chat: number;
   message: any;
   clientInfo: any;
 }
@@ -98,7 +99,7 @@ class Vk extends Bot {
   }
 
   async sendMessage(
-    peer: number,
+    peer: number | string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
     oneTime = true,
