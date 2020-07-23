@@ -18,12 +18,12 @@ interface ItelegtamCtx extends Ictx {
 }
 
 const API_URL = "https://api.telegram.org";
+const CHUNK_SIZE = 25;
 
 const sendMessageParams = (
   peer: number,
   message: string,
   keyboard: Array<Array<Ikeyboard>>,
-  oneTime = true,
   params = {}
 ) => {
   const buttons = keyboard.map(i =>
@@ -37,7 +37,7 @@ const sendMessageParams = (
     text: message,
     reply_markup: {
       resize_keyboard: true,
-      one_time_keyboard: oneTime,
+      one_time_keyboard: false,
       keyboard: buttons
     },
     ...params
@@ -72,7 +72,6 @@ class Telegram extends Bot {
           botCtx.user,
           botCtx.response,
           botCtx.keyboard,
-          botCtx.oneTime,
           botCtx.params
         );
         ctx.body.method = "sendMessage";
@@ -109,27 +108,24 @@ class Telegram extends Bot {
     peer: number,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
-    oneTime = true,
     params = {}
   ) {
     await this.api(
       "sendMessage",
-      sendMessageParams(peer, message, keyboard, oneTime, params)
+      sendMessageParams(peer, message, keyboard, params)
     );
   }
 
-  // TODO
-  // async sendMessages(users: Array<number>, msg: string) {
-  //   // for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-  //   //   const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
-  //   //   await this.api("messages.send", {
-  //   //     user_ids: chunk,
-  //   //     message: msg,
-  //   //     dont_parse_links: 1,
-  //   //     random_id: Date.now()
-  //   //   });
-  //   // }
-  // }
+  async sendMessages(users: Array<number>, message: string) {
+    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+      for (let j = i; j < i + CHUNK_SIZE && j < users.length; j += 1) {
+        await this.sendMessage(users[j], message, [[]]);
+      }
+      if (i + CHUNK_SIZE <= users.length) {
+        await new Promise(res => setTimeout(res, 2000));
+      }
+    }
+  }
 
   createCtx = (body: any): ItelegtamCtx => {
     const msg = body.message;
@@ -137,6 +133,7 @@ class Telegram extends Bot {
     return {
       bot: this,
       message: msg,
+      name: msg.from.username,
       chat: msg.chat.id,
       user: msg.from.id,
       isChat: false,

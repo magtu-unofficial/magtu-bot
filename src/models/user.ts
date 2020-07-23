@@ -40,7 +40,7 @@ interface IuserDocument extends mongoose.Document {
 interface IuserModel extends mongoose.Model<IuserDocument> {
   get(id: string): Promise<any>;
   set(id: string, data: any): Promise<void>;
-  setNotify(id: number, enable: boolean): Promise<void>;
+  setNotify(id: number | string, enable: boolean): Promise<void>;
   getNotifyList(): Promise<Array<number>>;
 }
 

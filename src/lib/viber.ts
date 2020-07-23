@@ -18,7 +18,39 @@ interface IviberCtx extends Ictx {
   message: any;
 }
 
+const BgColors = {
+  default: "#dddddd",
+  primary: "#323c8d",
+  positive: "#4bb34b",
+  negative: "#e64646"
+};
+
+const TextColors = {
+  default: "#111111",
+  primary: "#ffffff",
+  positive: "#ffffff",
+  negative: "#ffffff"
+};
+
 const API_URL = "https://chatapi.viber.com";
+const CHUNK_SIZE = 300;
+
+const mapKeyboard = (keyboard: Array<Array<Ikeyboard>>) => {
+  const buttons = [];
+  for (const i of keyboard) {
+    const cols = 6 / i.length;
+    for (const j of i) {
+      buttons.push({
+        Columns: cols,
+        Rows: 1,
+        BgColor: BgColors[j.color],
+        ActionBody: j.payload || j.label,
+        Text: `<font color='${TextColors[j.color]}'>${j.label}</font>`
+      });
+    }
+  }
+  return buttons;
+};
 
 class Viber extends Bot {
   constructor(config: IviberConfig) {
@@ -31,16 +63,14 @@ class Viber extends Bot {
       url: this.config.url
     });
 
+    this.api("get_account_info", {}).then(res => {
+      this.name = res.name;
+    });
+
     this.use(async (ctx, next) => {
       await next();
 
-      this.sendMessage(
-        ctx.user,
-        ctx.response,
-        ctx.keyboard,
-        ctx.oneTime,
-        ctx.params
-      );
+      this.sendMessage(ctx.user, ctx.response, ctx.keyboard, ctx.params);
     });
 
     const callback = this.getCallback();
@@ -84,50 +114,44 @@ class Viber extends Bot {
     if (res.status !== 0) {
       throw Error(res.status_message);
     }
-    return res.response;
+    return res;
   }
 
   async sendMessage(
     peer: number | string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
-    oneTime = true,
     params = {}
   ) {
-    // const buttons = keyboard.map(i =>
-    //   i.map(j => ({
-    //     color: j.color,
-    //     action: {
-    //       type: "text",
-    //       payload: j.payload ? JSON.stringify(j.payload) : "{}",
-    //       label: j.label
-    //     }
-    //   }))
-    // );
-
     await this.api("send_message", {
       receiver: peer,
       type: "text",
       sender: {
-        name: "Расписание МпК  Бот"
+        name: this.name
       },
       text: message,
+      keyboard: {
+        Type: "keyboard",
+        Buttons: mapKeyboard(keyboard)
+      },
       ...params
     });
   }
 
-  // async sendMessages(users: Array<number>, msg: string) {
-  //   for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-  //     const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
+  async sendMessages(users: Array<string>, message: string): Promise<void> {
+    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+      const chunk = users.slice(i, i + CHUNK_SIZE);
 
-  //     await this.api("messages.send", {
-  //       user_ids: chunk,
-  //       message: msg,
-  //       dont_parse_links: 1,
-  //       random_id: Date.now()
-  //     });
-  //   }
-  // }
+      await this.api("broadcast_message", {
+        broadcast_list: chunk,
+        type: "text",
+        sender: {
+          name: this.name
+        },
+        text: message
+      });
+    }
+  }
 
   createCtx = (body: any): IviberCtx => {
     return {
@@ -141,6 +165,7 @@ class Viber extends Bot {
   };
 
   config: IviberConfig;
+  name: string;
   sendQueue: Array<any> = [];
 }
 

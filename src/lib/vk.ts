@@ -47,13 +47,7 @@ class Vk extends Bot {
     this.use(async (ctx, next) => {
       await next();
 
-      this.sendMessage(
-        ctx.chat,
-        ctx.response,
-        ctx.keyboard,
-        ctx.oneTime,
-        ctx.params
-      );
+      this.sendMessage(ctx.chat, ctx.response, ctx.keyboard, ctx.params);
     });
 
     const callback = this.getCallback();
@@ -100,7 +94,6 @@ class Vk extends Bot {
     peer: number | string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
-    oneTime = true,
     params = {}
   ) {
     const buttons = keyboard.map(i =>
@@ -118,7 +111,7 @@ class Vk extends Bot {
       random_id: Date.now(),
       peer_id: peer,
       message,
-      keyboard: JSON.stringify({ buttons, one_time: oneTime }),
+      keyboard: JSON.stringify({ buttons, one_time: false }),
       ...params
     });
   }

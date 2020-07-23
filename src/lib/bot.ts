@@ -14,13 +14,12 @@ export interface Ikeyboard {
 }
 export interface Ictx {
   chat?: number | string;
-  user: number | string;
+  user: number | string; // А зачем тут вообще отдельно указывать юзера, если у нас всё в чате происходит
   name?: string;
   isChat?: boolean;
   text: string;
   response?: string;
   keyboard?: Array<Array<Ikeyboard>>;
-  oneTime?: boolean;
   platform: string;
   [key: string]: any;
 }
@@ -43,8 +42,11 @@ class Bot {
     peer: number | string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
-    oneTime: boolean,
     params: object
+  ): Promise<void>;
+  sendMessages?(
+    users: Array<string> | Array<number>,
+    message: string
   ): Promise<void>;
 }
 

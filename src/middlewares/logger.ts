@@ -7,7 +7,7 @@ export default async (ctx: Ictx, next: Next) => {
   const time = Date.now();
   await next();
   log.info(
-    `${ctx.name ? `${ctx.name} (${ctx.chat})` : ctx.chat} ${
+    `[${ctx.platform}] ${ctx.name ? `${ctx.name} (${ctx.chat})` : ctx.chat} ${
       Date.now() - time
     }ms: ${ctx.text} - ${
       !ctx.response || ctx.response.length < 20
