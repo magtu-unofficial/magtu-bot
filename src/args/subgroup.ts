@@ -1,4 +1,4 @@
-import Esubgroup from "../interfaces/subgroup";
+import { Esubgroup } from "../models/timetable";
 import { color } from "../lib/bot";
 import { subgroupArg, cancelKey } from "../text";
 

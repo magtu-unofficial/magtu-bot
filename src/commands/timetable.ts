@@ -1,11 +1,9 @@
 import dateArg from "../args/date";
 import groupArg from "../args/group";
 import subgroupArg from "../args/subgroup";
-import Ipair from "../interfaces/pair";
-import Esubgroup from "../interfaces/subgroup";
 import ArgsCommand from "../lib/argsCommand";
 import { color } from "../lib/bot";
-import Timetable from "../models/timetable";
+import Timetable, { Ipair, Esubgroup } from "../models/timetable";
 import dateTemplate from "../templates/date";
 import defaultKeyboard from "../templates/defaultKeyboard";
 import numberToEmoji from "../templates/numberToEmoji";

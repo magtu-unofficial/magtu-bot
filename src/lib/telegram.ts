@@ -57,6 +57,8 @@ class Telegram extends Bot {
     this.api("setWebhook", {
       url: this.config.url,
       allowed_updates: ["message", "inline_query"]
+    }).then(() => {
+      log.info("Telegram done");
     });
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
@@ -71,11 +73,8 @@ class Telegram extends Bot {
           botCtx.params
         );
         ctx.body.method = "sendMessage";
-        await next();
-      } else {
-        await next();
       }
-      // handle callback
+      await next();
     };
 
     return handle;
@@ -92,10 +91,7 @@ class Telegram extends Bot {
     });
     const res = await req.json();
     if (res.retry_after) {
-      log.warn(`Telegram flood. Retry afler ${res.retry_after}`);
-    }
-    if (!res.ok) {
-      throw Error(res.description);
+      throw Error(`Telegram flood. Retry afler ${res.retry_after}`);
     }
     return res.response;
   }

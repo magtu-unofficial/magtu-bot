@@ -70,11 +70,9 @@ class Vk extends Bot {
             await callback(this.createCtx(ctx.request.body));
           }
           ctx.body = "ok";
-          await next();
         }
-      } else {
-        await next();
       }
+      await next();
     };
 
     return handle;

@@ -1,8 +1,7 @@
 import dateArg from "../args/date";
 import teacherArg from "../args/teacher";
-import { Itpair } from "../interfaces/pair";
 import Command from "../lib/argsCommand";
-import Timetable from "../models/timetable";
+import Timetable, { Itpair } from "../models/timetable";
 import dateTemplate from "../templates/date";
 import numberToEmoji from "../templates/numberToEmoji";
 import {

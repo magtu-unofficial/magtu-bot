@@ -46,15 +46,14 @@ class Viber extends Bot {
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
       // verify sign https://developers.viber.com/docs/api/rest-bot-api/#callbacks
-      if (ctx.method === "POST" && ctx.url.indexOf(this.config.path) === 0) {
+      if (ctx.method === "POST" && ctx.path === this.config.path) {
         if (ctx.request.body.event === "message") {
           await callback(this.createCtx(ctx.request.body));
           ctx.body = "ok";
         } else if (ctx.request.body.event === "webhook") {
+          // При создании вебхука надо ответить 200 OK
           ctx.body = "ok";
           log.info("Viber done");
-        } else {
-          log.debug("WTF");
         }
       }
       await next();

@@ -8,23 +8,25 @@ import teacher from "./commands/teacher";
 import timetable from "./commands/timetable";
 import Router from "./lib/router";
 import Vk from "./lib/vk";
+import Telegram from "./lib/telegram";
+import Viber from "./lib/viber";
 import middlewares from "./middlewares";
 import { cmdNotFound } from "./text";
 import {
   vkToken,
   vkSecret,
   vkConfirm,
+  vkPath,
   tgToken,
   tgUrl,
+  tgPath,
   viberToken,
   viberUrl,
+  viberPath,
   port
 } from "./utils/config";
-
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
-import Telegram from "./lib/telegram";
-import Viber from "./lib/viber";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -41,18 +43,17 @@ const vk = new Vk({
   confirm: vkConfirm,
   token: vkToken,
   secret: vkSecret,
-  path: "/"
+  path: vkPath
 });
 vk.use(...middlewares);
 app.use(vk.koaMiddleware());
 log.info("VK done");
 
-const telegram = new Telegram({ token: tgToken, path: "/", url: tgUrl });
+const telegram = new Telegram({ token: tgToken, url: tgUrl, path: tgPath });
 telegram.use(...middlewares);
 app.use(telegram.koaMiddleware());
-log.info("Telegram done");
 
-const viber = new Viber({ token: viberToken, url: viberUrl, path: "/" });
+const viber = new Viber({ token: viberToken, url: viberUrl, path: viberPath });
 viber.use(...middlewares);
 app.use(viber.koaMiddleware());
 

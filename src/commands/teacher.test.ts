@@ -1,4 +1,4 @@
-import Esubgroup from "../interfaces/subgroup";
+import { Esubgroup } from "../models/timetable";
 import { teacherTemplate } from "./teacher";
 
 test("должен правильно генерироваться темплейт", () => {

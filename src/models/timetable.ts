@@ -1,5 +1,26 @@
 import mongoose from "mongoose";
-import Ipair from "../interfaces/pair";
+
+export interface Ipair {
+  number?: number;
+  name?: string;
+  teacher?: string;
+  classroom?: string;
+  subgroup?: Esubgroup;
+  string?: string;
+  changed?: boolean;
+  removed?: boolean;
+  error?: boolean;
+}
+
+export interface Itpair extends Ipair {
+  group: string;
+}
+
+export enum Esubgroup {
+  first = "first",
+  second = "second",
+  common = "common"
+}
 
 const timetable = new mongoose.Schema({
   date: { type: Date, required: true },
