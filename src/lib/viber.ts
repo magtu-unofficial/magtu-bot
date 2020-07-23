@@ -1,5 +1,6 @@
 import Koa from "koa";
 import fetch from "node-fetch";
+import crypto from "crypto";
 
 import log from "../utils/log";
 
@@ -45,8 +46,15 @@ class Viber extends Bot {
     const callback = this.getCallback();
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
-      // verify sign https://developers.viber.com/docs/api/rest-bot-api/#callbacks
-      if (ctx.method === "POST" && ctx.path === this.config.path) {
+      // https://developers.viber.com/docs/api/rest-bot-api/#callbacks
+      if (
+        ctx.method === "POST" &&
+        ctx.path === this.config.path &&
+        crypto
+          .createHmac("sha256", this.config.token)
+          .update(ctx.request.rawBody)
+          .digest("hex") === ctx.header["x-viber-content-signature"]
+      ) {
         if (ctx.request.body.event === "message") {
           await callback(this.createCtx(ctx.request.body));
           ctx.body = "ok";
@@ -73,6 +81,9 @@ class Viber extends Bot {
     });
     const res = await req.json();
 
+    if (res.status !== 0) {
+      throw Error(res.status_message);
+    }
     return res.response;
   }
 
@@ -119,16 +130,6 @@ class Viber extends Bot {
   // }
 
   createCtx = (body: any): IviberCtx => {
-    // let text: string;
-
-    // if (msg.reply_message) {
-    //   text = msg.reply_message.text;
-    // } else if (msg.fwd_messages && msg.fwd_messages.length > 0) {
-    //   text = msg.fwd_messages[0].text;
-    // } else {
-    //   text = msg.text;
-    // }
-
     return {
       bot: this,
       message: body,

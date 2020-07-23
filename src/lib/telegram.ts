@@ -55,14 +55,17 @@ class Telegram extends Bot {
 
     // FIXME добавить токен
     this.api("setWebhook", {
-      url: this.config.url,
+      url: `${this.config.url}/${this.config.token}`,
       allowed_updates: ["message", "inline_query"]
     }).then(() => {
       log.info("Telegram done");
     });
 
     const handle = async (ctx: Koa.ParameterizedContext, next: Koa.Next) => {
-      if (ctx.method === "POST" && ctx.url === this.config.path) {
+      if (
+        ctx.method === "POST" &&
+        ctx.path === `${this.config.path}/${this.config.token}`
+      ) {
         const botCtx = this.createCtx(ctx.request.body);
         await callback(botCtx);
         ctx.body = sendMessageParams(
@@ -90,9 +93,15 @@ class Telegram extends Bot {
       body: JSON.stringify(parameters)
     });
     const res = await req.json();
+
     if (res.retry_after) {
       throw Error(`Telegram flood. Retry afler ${res.retry_after}`);
     }
+
+    if (!res.ok) {
+      throw Error(res.description);
+    }
+
     return res.response;
   }
 
