@@ -99,7 +99,6 @@ class Vk extends Bot {
         color: j.color,
         action: {
           type: "text",
-          payload: j.payload ? JSON.stringify(j.payload) : "{}",
           label: j.label
         }
       }))

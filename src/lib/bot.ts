@@ -15,7 +15,6 @@ export enum color {
   positive = "positive"
 }
 export interface Ikeyboard {
-  payload?: object;
   label: string;
   color: color;
 }

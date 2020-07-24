@@ -33,23 +33,6 @@ const TextColors = {
 const API_URL = "https://chatapi.viber.com";
 const CHUNK_SIZE = 300;
 
-const mapKeyboard = (keyboard: Array<Array<Ikeyboard>>) => {
-  const buttons = [];
-  for (const i of keyboard) {
-    const cols = 6 / i.length;
-    for (const j of i) {
-      buttons.push({
-        Columns: cols,
-        Rows: 1,
-        BgColor: BgColors[j.color],
-        ActionBody: j.payload || j.label,
-        Text: `<font color='${TextColors[j.color]}'>${j.label}</font>`
-      });
-    }
-  }
-  return buttons;
-};
-
 class Viber extends Bot {
   constructor(config: IviberConfig) {
     super();
@@ -99,6 +82,7 @@ class Viber extends Bot {
   }
 
   async api(method: string, parameters: any) {
+    console.log(JSON.stringify(parameters));
     const req = await fetch(`${API_URL}/pa/${method}`, {
       method: "POST",
       headers: {
@@ -121,6 +105,20 @@ class Viber extends Bot {
     keyboard: Array<Array<Ikeyboard>>,
     params = {}
   ) {
+    const buttons = [];
+    for (const i of keyboard) {
+      const cols = 6 / i.length;
+      for (const j of i) {
+        buttons.push({
+          Columns: cols,
+          Rows: 1,
+          BgColor: BgColors[j.color],
+          ActionBody: j.label,
+          Text: `<font color='${TextColors[j.color]}'>${j.label}</font>`
+        });
+      }
+    }
+
     await this.api("send_message", {
       receiver: peer,
       type: "text",
@@ -130,7 +128,7 @@ class Viber extends Bot {
       text: message,
       keyboard: {
         Type: "keyboard",
-        Buttons: mapKeyboard(keyboard)
+        Buttons: buttons
       },
       ...params
     });

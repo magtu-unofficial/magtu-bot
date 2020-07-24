@@ -110,13 +110,11 @@ export default new ArgsCommand(
       ctx.keyboard.push([
         {
           label: `${group}${timetableButtonToday}`,
-          color: color.default,
-          payload: { command: `расписание сегодня ${group} ${subgroup}` }
+          color: color.default
         },
         {
           label: `${group}${timetableButtonTomorrow}`,
-          color: color.default,
-          payload: { command: `расписание завтра ${group} ${subgroup}` }
+          color: color.default
         }
       ]);
     } catch (error) {
