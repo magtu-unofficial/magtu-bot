@@ -1,4 +1,5 @@
 import ArgsCommand from "./argsCommand";
+import { platform } from "./bot";
 
 test("должен парсить аргументы без проблела", () => {
   const cmd = new ArgsCommand(
@@ -21,8 +22,10 @@ test("должен парсить аргументы без проблела", (
 
   cmd.handler({
     text: "/test 22 fffFFF",
-    platform: "text",
-    user: 13245,
+    platform: platform.test,
+    user: "13245",
+    chat: "12345",
+    isChat: false,
     session: { currentCommand: -1 },
     args: ["22", "fffFFF"]
   });
@@ -50,8 +53,10 @@ test("должен парсить аргументы с пробелом", () =>
 
   cmd.handler({
     text: "/test 22 fffFFF",
-    platform: "text",
-    user: 13245,
+    platform: platform.test,
+    user: "13245",
+    chat: "12345",
+    isChat: false,
     session: { currentCommand: -1 },
     args: ["22", "fffFFF", "wat"]
   });
@@ -81,8 +86,10 @@ test("должен возвращать ошибки", () => {
 
   cmd.handler({
     text: "/test 22 fffFFF",
-    platform: "text",
-    user: 13245,
+    platform: platform.test,
+    user: "13245",
+    chat: "12345",
+    isChat: false,
     session: { currentCommand: -1 },
     args: ["22", "fffFFF"]
   });

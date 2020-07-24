@@ -1,6 +1,13 @@
 import { Next } from "koa";
 import compose from "koa-compose";
 
+export enum platform {
+  vk = "vk",
+  telegram = "telegram",
+  viber = "viber",
+  test = "test"
+}
+
 export enum color {
   primary = "primary",
   default = "default",
@@ -13,14 +20,14 @@ export interface Ikeyboard {
   color: color;
 }
 export interface Ictx {
-  chat?: number | string;
-  user: number | string; // А зачем тут вообще отдельно указывать юзера, если у нас всё в чате происходит
+  chat: string; // id чата или пользователя, куда отвечаем
+  user?: string; // конкретный пользователь
+  isChat: boolean;
   name?: string;
-  isChat?: boolean;
   text: string;
   response?: string;
   keyboard?: Array<Array<Ikeyboard>>;
-  platform: string;
+  platform: platform;
   [key: string]: any;
 }
 
@@ -39,15 +46,12 @@ class Bot {
 
   middlewares: Array<Middleware> = [];
   sendMessage?(
-    peer: number | string,
+    chat: string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
     params: object
   ): Promise<void>;
-  sendMessages?(
-    users: Array<string> | Array<number>,
-    message: string
-  ): Promise<void>;
+  sendMessages?(chat: Array<string>, message: string): Promise<void>;
 }
 
 export default Bot;

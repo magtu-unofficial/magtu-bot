@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 import log from "../utils/log";
 
-import Bot, { Ictx, Ikeyboard } from "./bot";
+import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 
 interface ItelegtamConfig {
   token: string;
@@ -12,8 +12,6 @@ interface ItelegtamConfig {
 }
 
 interface ItelegtamCtx extends Ictx {
-  platform: "telegram";
-  user: number;
   message: any;
 }
 
@@ -21,7 +19,7 @@ const API_URL = "https://api.telegram.org";
 const CHUNK_SIZE = 25;
 
 const sendMessageParams = (
-  peer: number,
+  chat: string,
   message: string,
   keyboard: Array<Array<Ikeyboard>>,
   params = {}
@@ -33,7 +31,7 @@ const sendMessageParams = (
   );
 
   return {
-    chat_id: peer,
+    chat_id: chat,
     text: message,
     reply_markup: {
       resize_keyboard: true,
@@ -105,18 +103,18 @@ class Telegram extends Bot {
   }
 
   async sendMessage(
-    peer: number,
+    chat: string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
     params = {}
   ) {
     await this.api(
       "sendMessage",
-      sendMessageParams(peer, message, keyboard, params)
+      sendMessageParams(chat, message, keyboard, params)
     );
   }
 
-  async sendMessages(users: Array<number>, message: string) {
+  async sendMessages(users: Array<string>, message: string) {
     for (let i = 0; i < users.length; i += CHUNK_SIZE) {
       for (let j = i; j < i + CHUNK_SIZE && j < users.length; j += 1) {
         await this.sendMessage(users[j], message, [[]]);
@@ -138,7 +136,7 @@ class Telegram extends Bot {
       user: msg.from.id,
       isChat: false,
       text: msg.text,
-      platform: "telegram"
+      platform: platform.telegram
     };
   };
 

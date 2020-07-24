@@ -1,12 +1,13 @@
-import Bot from "./bot";
+import Bot, { platform } from "./bot";
 
 describe("Базовый класс бота", () => {
   test("Middleware должны выполняться", async () => {
     const statctx = {
-      user: 200,
+      platform: platform.test,
+      user: "13245",
+      chat: "12345",
       isChat: false,
-      text: "test",
-      platform: "test"
+      text: "test"
     };
 
     const bot = new Bot();

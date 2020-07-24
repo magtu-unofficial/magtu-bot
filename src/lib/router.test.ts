@@ -1,7 +1,7 @@
 import Command from "./command";
 import ArgsCommand from "./argsCommand";
 import Router from "./router";
-import { Ictx } from "./bot";
+import { Ictx, platform } from "./bot";
 
 test("должен присваисвать id командам", () => {
   const router = new Router(() => {});
@@ -22,10 +22,25 @@ test("должен вызвать нужный middleware", () => {
   router.add(new Command(/аоаоа/i, fn2));
   const middleware = router.middleware();
 
-  middleware({ platform: "test", user: 1, text: "тест" }, async () => {});
+  middleware(
+    {
+      platform: platform.test,
+      user: "1",
+      chat: "1",
+      isChat: false,
+      text: "тест"
+    },
+    async () => {}
+  );
 
   middleware(
-    { platform: "test", user: 1, text: "тест кек лол" },
+    {
+      platform: platform.test,
+      user: "1",
+      chat: "1",
+      isChat: false,
+      text: "тест кек лол"
+    },
     async () => {}
   );
 
@@ -60,8 +75,10 @@ test("должен вести диалог", async () => {
   const middleware = router.middleware();
 
   const ctx: Ictx = {
-    platform: "test",
-    user: 1,
+    platform: platform.test,
+    user: "1",
+    chat: "1",
+    isChat: false,
     text: "test",
     session: {},
     args: []

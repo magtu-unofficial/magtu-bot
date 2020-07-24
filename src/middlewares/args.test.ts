@@ -1,10 +1,12 @@
-import { Ictx } from "../lib/bot";
+import { Ictx, platform } from "../lib/bot";
 import args from "./args";
 
 test("должен парсить аргументы", () => {
   const ctx: Ictx = {
-    platform: "test",
-    user: 1,
+    platform: platform.test,
+    chat: "1",
+    user: "1",
+    isChat: false,
     text: "тест раз два три"
   };
   args(ctx, async () => {});
@@ -13,8 +15,10 @@ test("должен парсить аргументы", () => {
 
 test("должен создавать пустой массив", () => {
   const ctx: Ictx = {
-    platform: "test",
-    user: 1,
+    platform: platform.test,
+    chat: "1",
+    user: "1",
+    isChat: false,
     text: "тест"
   };
   args(ctx, async () => {});

@@ -3,16 +3,8 @@ import { Ictx } from "../lib/bot";
 
 import user from "../models/user";
 
-export const getSessionKey = (ctx: Ictx): string => {
-  const userId = ctx.platform + (ctx.chat || ctx.user);
-
-  return userId;
-};
-
 export default async (ctx: Ictx, next: Next) => {
-  const key = getSessionKey(ctx);
-
-  ctx.session = await user.get(key);
+  ctx.session = await user.get(ctx.chat || ctx.user, ctx.platform);
   await next();
-  await user.set(key, ctx.session);
+  await user.set(ctx.chat || ctx.user, ctx.platform, ctx.session);
 };

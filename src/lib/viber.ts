@@ -4,7 +4,7 @@ import crypto from "crypto";
 
 import log from "../utils/log";
 
-import Bot, { Ictx, Ikeyboard } from "./bot";
+import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 
 interface IviberConfig {
   token: string;
@@ -13,8 +13,6 @@ interface IviberConfig {
 }
 
 interface IviberCtx extends Ictx {
-  platform: "viber";
-  user: string;
   message: any;
 }
 
@@ -159,8 +157,9 @@ class Viber extends Bot {
       message: body,
       user: body.sender.id,
       chat: body.sender.id,
+      isChat: false, // В вайбере не поддерживаем чаты
       text: body.message.text,
-      platform: "viber"
+      platform: platform.viber
     };
   };
 

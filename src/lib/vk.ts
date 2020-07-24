@@ -2,7 +2,7 @@ import Koa from "koa";
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
-import Bot, { Ictx, Ikeyboard } from "./bot";
+import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 
 interface IvkConfig {
   token: string;
@@ -12,8 +12,6 @@ interface IvkConfig {
 }
 
 interface IvkCtx extends Ictx {
-  platform: "vk";
-  chat: number;
   message: any;
   clientInfo: any;
 }
@@ -91,7 +89,7 @@ class Vk extends Bot {
   }
 
   async sendMessage(
-    peer: number | string,
+    chat: string,
     message: string,
     keyboard: Array<Array<Ikeyboard>>,
     params = {}
@@ -109,14 +107,14 @@ class Vk extends Bot {
 
     await this.api("messages.send", {
       random_id: Date.now(),
-      peer_id: peer,
+      peer_id: chat,
       message,
       keyboard: JSON.stringify({ buttons, one_time: false }),
       ...params
     });
   }
 
-  async sendMessages(users: Array<number>, msg: string) {
+  async sendMessages(users: Array<string>, msg: string) {
     for (let i = 0; i < users.length; i += CHUNK_SIZE) {
       const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
 
@@ -150,7 +148,7 @@ class Vk extends Bot {
       user: msg.from_id,
       isChat: msg.from_id !== msg.peer_id,
       text,
-      platform: "vk"
+      platform: platform.vk
     };
   };
 
