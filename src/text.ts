@@ -57,10 +57,8 @@ export const boolArg = {
 };
 
 export const reportTextArg = {
-  name: "Сообщение об ошибке",
   query: `Коротко опишите проблему, которая у вас возникла или просто перешлите сообщение в котором содержится ошибка. Для отмены напишите "Отмена"`,
-  error: 'Для отмены напишите "Отмена"',
-  help: ""
+  error: 'Для отмены напишите "Отмена"'
 };
 
 export const teacherArg = {
@@ -115,7 +113,7 @@ export const notifyEnabled = `Уведомления включены.
 export const notifyDisabled = "Уведомления о новых заменах выключены";
 
 export const helpKey = "Справка";
-export const helpCmd = /cправка|помощь|help/i;
+export const helpCmd = /[Сс]правка|[Пп]омощь|help/i;
 export const helpAnswer = `Чтобы узнать расписание с заменами напишите команду "расписание" и отвечайте на вопросы бота.
 Подробная справка: https://mpk.ivanik.ru`;
 

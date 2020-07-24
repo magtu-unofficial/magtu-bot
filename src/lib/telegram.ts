@@ -33,6 +33,7 @@ const sendMessageParams = (
   return {
     chat_id: chat,
     text: message,
+    disable_web_page_preview: true,
     reply_markup: {
       resize_keyboard: true,
       one_time_keyboard: false,

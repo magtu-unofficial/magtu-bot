@@ -82,7 +82,6 @@ class Viber extends Bot {
   }
 
   async api(method: string, parameters: any) {
-    console.log(JSON.stringify(parameters));
     const req = await fetch(`${API_URL}/pa/${method}`, {
       method: "POST",
       headers: {

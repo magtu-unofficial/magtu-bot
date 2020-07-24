@@ -26,6 +26,11 @@ export default class Router {
         ctx.session.currentCommand = -1;
       }
 
+      if (ctx.canceled) {
+        await next();
+        return;
+      }
+
       if (!ctx.session || ctx.session.currentCommand === -1) {
         for (const command of this.commands) {
           if (command.check(ctx.text)) {

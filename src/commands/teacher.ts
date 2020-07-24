@@ -1,7 +1,7 @@
 import dateArg from "../args/date";
 import teacherArg from "../args/teacher";
 import Command from "../lib/argsCommand";
-import Timetable, { Itpair } from "../models/timetable";
+import Timetable, { Itpair, Esubgroup } from "../models/timetable";
 import dateTemplate from "../templates/date";
 import numberToEmoji from "../templates/numberToEmoji";
 import {
@@ -23,7 +23,11 @@ export const teacherTemplate = (pairs: Array<Itpair>, d: Date) => {
         // TODO исправить парсер для правильного парсинга строк
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")} - ${pair.group}`;
       } else {
-        answer += ` ${pair.name} - ${pair.group}${
+        const subgroup =
+          pair.subgroup !== Esubgroup.common
+            ? `(${pair.subgroup === Esubgroup.first ? "1" : "2"}) `
+            : "";
+        answer += ` ${pair.name} - ${pair.group}${subgroup}${
           pair.classroom ? ` 🚪${pair.classroom}` : ""
         }`;
       }
