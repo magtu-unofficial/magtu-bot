@@ -126,6 +126,11 @@ export default new ArgsCommand(
           color: color.default
         }
       ]);
+
+      ctx.session.lastQuery = {
+        group,
+        subgroup
+      };
     } catch (error) {
       if (error.message === "Not found") {
         ctx.response = timetableNotFound(dateTemplate(date));
