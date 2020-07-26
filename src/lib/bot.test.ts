@@ -12,7 +12,7 @@ describe("Базовый класс бота", () => {
 
     const bot = new Bot();
     const middleware1 = jest.fn(async (ctx, next) => {
-      expect(ctx.user).toBe(200);
+      expect(ctx.user).toBe("13245");
       ctx.test = 1;
       await next();
     });

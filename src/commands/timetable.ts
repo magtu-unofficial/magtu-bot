@@ -2,7 +2,7 @@ import dateArg from "../args/date";
 import groupArg from "../args/group";
 import subgroupArg from "../args/subgroup";
 import ArgsCommand from "../lib/argsCommand";
-import { color } from "../lib/bot";
+import { color, platform } from "../lib/bot";
 import Timetable, { Ipair, Esubgroup } from "../models/timetable";
 import dateTemplate from "../templates/date";
 import defaultKeyboard from "../templates/defaultKeyboard";
@@ -22,7 +22,8 @@ export const timetableTemplate = (
   date: Date,
   displayName: string,
   pairs: Array<Ipair>,
-  subgroup: Esubgroup
+  subgroup: Esubgroup,
+  emoji: Boolean
 ) => {
   let answer = timetableForGroup(
     dateTemplate(date),
@@ -37,13 +38,18 @@ export const timetableTemplate = (
       pair.subgroup === Esubgroup.common ||
       !pair.subgroup
     ) {
-      answer += `\n${numberToEmoji(pair.number)}${
-        pair.subgroup === Esubgroup.first || pair.subgroup === Esubgroup.second
-          ? "➡️"
-          : ""
-      }${pair.changed ? "✏" : ""}`;
+      if (emoji) {
+        answer += `\n${numberToEmoji(pair.number)}${
+          pair.subgroup === Esubgroup.first ||
+          pair.subgroup === Esubgroup.second
+            ? "➡️"
+            : ""
+        }${pair.changed ? "✏" : ""}`;
+      } else {
+        answer += `\n${pair.number}.${pair.changed ? " (зам)" : ""}`;
+      }
       if (pair.removed) {
-        answer += pairCanceled;
+        answer += ` ${pairCanceled}`;
       } else if (pair.error) {
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
       } else {
@@ -64,6 +70,7 @@ export default new ArgsCommand(
     const date: Date | string = ctx.session.args[0];
     const group: string = ctx.session.args[1];
     const subgroup: Esubgroup = ctx.session.args[2];
+    const emoji = ctx.platform !== platform.viber;
 
     try {
       if (typeof date === "string") {
@@ -85,7 +92,8 @@ export default new ArgsCommand(
               day.date,
               day.displayName,
               day.pairs,
-              subgroup
+              subgroup,
+              emoji
             )}\n\n`;
           }
           ctx.response = answer;
@@ -99,7 +107,8 @@ export default new ArgsCommand(
             day.date,
             day.displayName,
             day.pairs,
-            subgroup
+            subgroup,
+            emoji
           );
         } else {
           throw Error("Not found");

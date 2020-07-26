@@ -6,12 +6,14 @@ import notify from "./commands/notify";
 import report from "./commands/report";
 import teacher from "./commands/teacher";
 import timetable from "./commands/timetable";
+import { platform } from "./lib/bot";
 import Router from "./lib/router";
 import Vk from "./lib/vk";
 import Telegram from "./lib/telegram";
 import Viber from "./lib/viber";
 import middlewares from "./middlewares";
-import { cmdNotFound } from "./text";
+import User from "./models/user";
+import { cmdNotFound, newChanges } from "./text";
 import {
   vkToken,
   vkSecret,
@@ -35,7 +37,7 @@ const router = new Router(ctx => {
   ctx.response = cmdNotFound;
 });
 
-router.add(timetable, teacher, help, notify, report);
+router.add(timetable, teacher, notify, report, help);
 
 middlewares.push(router.middleware());
 
@@ -56,6 +58,20 @@ app.use(telegram.koaMiddleware());
 const viber = new Viber({ token: viberToken, url: viberUrl, path: viberPath });
 viber.use(...middlewares);
 app.use(viber.koaMiddleware());
+
+app.use(async ctx => {
+  if (ctx.method === "GET" && ctx.path === "/notify") {
+    const vkList = await User.getNotifyList(platform.vk);
+    vk.sendMessages(vkList, newChanges);
+
+    const tgList = await User.getNotifyList(platform.telegram);
+    telegram.sendMessages(tgList, newChanges);
+
+    const viberList = await User.getNotifyList(platform.viber);
+    viber.sendMessages(viberList, newChanges);
+    ctx.body = "ok";
+  }
+});
 
 app.use(ctx => {
   if (ctx.method === "GET") {

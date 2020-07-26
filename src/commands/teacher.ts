@@ -2,6 +2,7 @@ import dateArg from "../args/date";
 import teacherArg from "../args/teacher";
 import Command from "../lib/argsCommand";
 import Timetable, { Itpair, Esubgroup } from "../models/timetable";
+import { platform } from "../lib/bot";
 import dateTemplate from "../templates/date";
 import numberToEmoji from "../templates/numberToEmoji";
 import {
@@ -11,21 +12,29 @@ import {
   timetableNotFound
 } from "../text";
 
-export const teacherTemplate = (pairs: Array<Itpair>, d: Date) => {
+export const teacherTemplate = (
+  pairs: Array<Itpair>,
+  d: Date,
+  emoji: boolean
+) => {
   let answer = timetableForTeacher(dateTemplate(d), pairs[0].teacher);
 
   const sortedPairs = pairs.sort((a, b) => a.number - b.number);
   // Отображение подгруппы
   for (const pair of sortedPairs) {
     if (!pair.removed) {
-      answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""}`;
+      if (emoji) {
+        answer += `\n${numberToEmoji(pair.number)}${pair.changed ? "✏" : ""}`;
+      } else {
+        answer += `\n${pair.number}.${pair.changed ? " (зам)" : ""}`;
+      }
       if (pair.error) {
         // TODO исправить парсер для правильного парсинга строк
         answer += `❓ ${pair.string.replace(/\r?\n/g, "")} - ${pair.group}`;
       } else {
         const subgroup =
           pair.subgroup !== Esubgroup.common
-            ? `(${pair.subgroup === Esubgroup.first ? "1" : "2"}) `
+            ? `(${pair.subgroup === Esubgroup.first ? "1" : "2"})`
             : "";
         answer += ` ${pair.name} - ${pair.group}${subgroup}${
           pair.classroom ? ` 🚪${pair.classroom}` : ""
@@ -75,11 +84,13 @@ export default new Command(
     const date: Date | string = ctx.session.args[0];
     const teacher: string = ctx.session.args[1];
 
+    const emoji = ctx.platform !== platform.viber;
+
     const teacherRegExp = new RegExp(teacher, "i");
     try {
       if (date instanceof Date) {
         const pairs = await find(date, teacherRegExp);
-        ctx.response = teacherTemplate(pairs, date);
+        ctx.response = teacherTemplate(pairs, date, emoji);
       } else if (date === "all") {
         let answer = "";
         const findDate = new Date();
@@ -91,7 +102,7 @@ export default new Command(
         for (let i = 0; i <= 7; i += 1) {
           try {
             const pairs = await find(findDate, teacherRegExp);
-            answer += `${teacherTemplate(pairs, findDate)}\n\n`;
+            answer += `${teacherTemplate(pairs, findDate, emoji)}\n\n`;
           } catch (error) {
             if (error.message !== "Not found") {
               throw error;

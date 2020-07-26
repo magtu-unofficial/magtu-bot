@@ -30,7 +30,7 @@ describe("Проверка чата", () => {
         object: {
           message: {
             peer_id: 2000000001,
-            from_id: 1,
+            from_id: "1",
             text: "kek"
           }
         }
@@ -44,7 +44,7 @@ describe("Проверка чата", () => {
         object: {
           message: {
             peer_id: 2000000001,
-            from_id: 1,
+            from_id: "1",
             text: "/kek"
           }
         }
@@ -66,7 +66,7 @@ describe("Создание контекста", () => {
     };
     expect(new Vk(config).createCtx(body)).toMatchObject({
       chat: 1,
-      user: "1",
+      user: 1,
       isChat: false,
       text: "kek",
       platform: "vk"
@@ -86,7 +86,7 @@ describe("Создание контекста", () => {
     };
     expect(new Vk(config).createCtx(body)).toMatchObject({
       chat: 1,
-      user: "1",
+      user: 1,
       isChat: false,
       text: "kek",
       platform: "vk"
@@ -105,7 +105,7 @@ describe("Создание контекста", () => {
     };
     expect(new Vk(config).createCtx(body)).toMatchObject({
       chat: 2,
-      user: "1",
+      user: 1,
       isChat: true,
       text: "kek",
       platform: "vk"
