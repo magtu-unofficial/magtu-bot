@@ -2,6 +2,7 @@ import Koa from "koa";
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
+import log from "../utils/log";
 import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 
 interface IvkConfig {
@@ -60,10 +61,15 @@ class Vk extends Bot {
       ) {
         if (ctx.request.body.type === "message_new") {
           // TODO: trycatch
-          if (isOurMessage(ctx.request.body)) {
-            await callback(this.createCtx(ctx.request.body));
+          try {
+            if (isOurMessage(ctx.request.body)) {
+              await callback(this.createCtx(ctx.request.body));
+            }
+            ctx.body = "ok";
+          } catch (error) {
+            log.error(error);
+            throw error;
           }
-          ctx.body = "ok";
         }
       }
       await next();
@@ -85,6 +91,7 @@ class Vk extends Bot {
     });
     const res = await req.json();
     if (res.error) {
+      log.error(`[vk] ${res.error.error_msg}`);
       throw Error(res.error.error_msg);
     }
     return res.response;

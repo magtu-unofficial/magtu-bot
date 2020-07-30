@@ -25,7 +25,8 @@ import {
   viberToken,
   viberUrl,
   viberPath,
-  port
+  port,
+  notifySecret
 } from "./utils/config";
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
@@ -61,7 +62,11 @@ viber.use(...middlewares);
 app.use(viber.koaMiddleware());
 
 app.use(async ctx => {
-  if (ctx.method === "GET" && ctx.path === "/notify") {
+  if (
+    ctx.method === "GET" &&
+    ctx.path === "/notify" &&
+    ctx.query.secret === notifySecret
+  ) {
     const vkList = await User.getNotifyList(platform.vk);
     vk.sendMessages(vkList, newChanges);
 

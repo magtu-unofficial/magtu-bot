@@ -67,8 +67,13 @@ class Viber extends Bot {
           .digest("hex") === ctx.header["x-viber-content-signature"]
       ) {
         if (ctx.request.body.event === "message") {
-          await callback(this.createCtx(ctx.request.body));
-          ctx.body = "ok";
+          try {
+            await callback(this.createCtx(ctx.request.body));
+            ctx.body = "ok";
+          } catch (error) {
+            log.error(error);
+            throw error;
+          }
         } else if (ctx.request.body.event === "webhook") {
           // При создании вебхука надо ответить 200 OK
           ctx.body = "ok";
@@ -93,6 +98,7 @@ class Viber extends Bot {
     const res = await req.json();
 
     if (res.status !== 0) {
+      log.error(`[viber] ${res.status_message}`);
       throw Error(res.status_message);
     }
     return res;

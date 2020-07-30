@@ -7,11 +7,11 @@ export default new Command(reportCmd, [reportText], async ctx => {
   ctx.session.lastReport = new Date();
   ctx.response = reportthanks;
   await sendAdmin(
-    ctx.bot,
-    `report https://vk.com/id${ctx.message.peer_id} ${Date().toString()}
+    `*report ${ctx.platform} ${ctx.chat}*
+${ctx.text}
 
-    ${ctx.session.args[0]}
-  
-    ${JSON.stringify(ctx.session)}`
+\`\`\`
+${JSON.stringify(ctx.session, null, 2)}
+\`\`\``
   );
 });

@@ -30,11 +30,9 @@ const sendMessageParams = (
     }))
   );
 
-  const kek = message.replace(/[-.+?^$[\](){}\\!]/g, "\\$&");
-
   return {
     chat_id: chat,
-    text: kek,
+    text: message.replace(/[-.+?^$[\](){}\\!]/g, "\\$&"),
     disable_web_page_preview: true,
     parse_mode: "MarkdownV2",
     reply_markup: {
@@ -68,15 +66,19 @@ class Telegram extends Bot {
         ctx.path === `${this.config.path}/${this.config.token}`
       ) {
         const botCtx = this.createCtx(ctx.request.body);
-        await callback(botCtx);
-        ctx.body = sendMessageParams(
-          botCtx.user,
-          botCtx.response,
-          botCtx.keyboard,
-          botCtx.params
-        );
-        console.log(JSON.stringify(ctx.body));
-        ctx.body.method = "sendMessage";
+        try {
+          await callback(botCtx);
+          ctx.body = sendMessageParams(
+            botCtx.user,
+            botCtx.response,
+            botCtx.keyboard,
+            botCtx.params
+          );
+          ctx.body.method = "sendMessage";
+        } catch (error) {
+          log.error(error);
+          throw error;
+        }
       }
       await next();
     };
@@ -96,10 +98,12 @@ class Telegram extends Bot {
     const res = await req.json();
 
     if (res.retry_after) {
+      log.error(`[tg] flood. Retry afler ${res.retry_after}`);
       throw Error(`Telegram flood. Retry afler ${res.retry_after}`);
     }
 
     if (!res.ok) {
+      log.error(`[tg] ${res.description}`);
       throw Error(res.description);
     }
 

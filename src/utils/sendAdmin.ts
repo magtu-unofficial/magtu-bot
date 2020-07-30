@@ -1,12 +1,24 @@
-import { adminId } from "./config";
-import Vk from "../lib/vk";
+import fetch from "node-fetch";
+import { tgToken, adminId } from "./config";
 
-// TODO переписать под телегу
-export default async (bot: Vk, msg: String) => {
-  await bot.api("messages.send", {
-    peer_id: adminId,
-    message: msg,
-    dont_parse_links: 1,
-    random_id: Date.now()
-  });
+export default async (msg: String) => {
+  const parameters = {
+    chat_id: adminId,
+    parse_mode: "MarkdownV2",
+    text: msg.replace(/[-.+?^$[\](){}\\=!]/g, "\\$&")
+  };
+
+  const res = await fetch(
+    `https://api.telegram.org/bot${tgToken}/sendMessage`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(parameters)
+    }
+  );
+
+  await res.json();
 };
