@@ -18,5 +18,6 @@ export const viberUrl = process.env.VIBER_URL;
 export const viberPath = process.env.VIBER_PATH;
 
 export const mongoUri = process.env.MONGO_URI;
+export const adminBotToken = process.env.ADMIN_BOT_TOKEN;
 export const adminId = process.env.ADMIN_ID;
 export const notifySecret = process.env.NOTIFY_SECRET;

@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { tgToken, adminId } from "./config";
+import { adminBotToken, adminId } from "./config";
 
 export default async (msg: String) => {
   const parameters = {
@@ -9,7 +9,7 @@ export default async (msg: String) => {
   };
 
   const res = await fetch(
-    `https://api.telegram.org/bot${tgToken}/sendMessage`,
+    `https://api.telegram.org/bot${adminBotToken}/sendMessage`,
     {
       method: "POST",
       headers: {

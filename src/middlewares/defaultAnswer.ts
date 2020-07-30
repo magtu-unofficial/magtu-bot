@@ -26,6 +26,7 @@ const defaultKeyboard: Array<Array<Ikeyboard>> = [
 ];
 
 export default async (ctx: Ictx, next: Next) => {
+  if (!ctx.text) ctx.text = "";
   if (!ctx.response) ctx.response = unexpectedError;
   if (!ctx.keyboard) ctx.keyboard = [...defaultKeyboard];
   if (!ctx.params) ctx.params = {};

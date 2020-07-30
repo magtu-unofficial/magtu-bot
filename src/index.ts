@@ -31,12 +31,19 @@ import {
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
 import donate from "./commands/donate";
+import sendAdmin from "./utils/sendAdmin";
 
 const app = new Koa();
 app.use(bodyParser());
 
 const router = new Router(ctx => {
   ctx.response = cmdNotFound;
+  sendAdmin(`*NF ${ctx.platform} ${ctx.user}*
+${ctx.text}
+
+\`\`\`
+${JSON.stringify(ctx.message, null, 2)}
+\`\`\``);
 });
 
 router.add(timetable, teacher, notify, report, help, donate);
