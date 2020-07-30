@@ -31,7 +31,11 @@ export default class ArgsCommand extends Command {
   }
 
   handler = async (ctx: Ictx) => {
-    const argsCount: number = ctx.args.length;
+    const args = ctx.text.split(" ");
+    const cmdIndex = args.findIndex(arg => arg.search(this.regexp) !== -1);
+    args.splice(0, cmdIndex + 1);
+
+    const argsCount: number = args.length;
     if (!ctx.session.args) {
       ctx.session.args = [];
     }
@@ -62,19 +66,19 @@ export default class ArgsCommand extends Command {
     } else if (argsCount <= this.maxArgs) {
       // Одной строкой
       const errors: Array<string> = [];
-      const lastArgWithSpace = ctx.args.length !== this.args.length;
+      const lastArgWithSpace = args.length !== this.args.length;
 
       for (const [i, commandArg] of this.args.entries()) {
         try {
           if (
             Object.hasOwnProperty.call(this.args, i) &&
-            Object.hasOwnProperty.call(ctx.args, i)
+            Object.hasOwnProperty.call(args, i)
           ) {
-            const queryArg = ctx.args[i];
+            const queryArg = args[i];
             // Если последний аргумент с пробелами и у нас это разрешено, то это условие
             // выполняиться для последенго аргумента
             if (lastArgWithSpace && i === this.args.length - 1) {
-              const argString = ctx.args.slice(i).join(" ");
+              const argString = args.slice(i).join(" ");
               ctx.session.args[i] = await commandArg.parser(argString);
             } else {
               ctx.session.args[i] = await commandArg.parser(queryArg);

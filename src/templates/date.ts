@@ -1,4 +1,4 @@
-import { daysWeek } from "../text";
+import { daysWeek, soonDate } from "../text";
 
 const singleDigit = 9;
 
@@ -10,5 +10,5 @@ export default (date: Date | string) => {
       date.getMonth() + 1
     }.${date.getFullYear()}`;
   }
-  return "ближайшие дни";
+  return soonDate;
 };

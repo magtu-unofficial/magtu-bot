@@ -1,13 +1,33 @@
 import { Next } from "koa";
-import { Ictx } from "../lib/bot";
+import { color, Ictx, Ikeyboard } from "../lib/bot";
+import {
+  donateKey,
+  helpKey,
+  notifyKey,
+  reportKey,
+  teacherKey,
+  timetableKey,
+  unexpectedError
+} from "../text";
 
-import { unexpectedError } from "../text";
-import defaultKeyboard from "../templates/defaultKeyboard";
+const defaultKeyboard: Array<Array<Ikeyboard>> = [
+  [
+    { label: timetableKey, color: color.primary },
+    { label: teacherKey, color: color.default }
+  ],
+  [
+    { label: notifyKey, color: color.default },
+    { label: helpKey, color: color.default }
+  ],
+  [
+    { label: reportKey, color: color.default },
+    { label: donateKey, color: color.default }
+  ]
+];
 
 export default async (ctx: Ictx, next: Next) => {
   if (!ctx.response) ctx.response = unexpectedError;
-  if (!ctx.keyboard) ctx.keyboard = defaultKeyboard;
-  if (!ctx.oneTime) ctx.oneTime = false;
+  if (!ctx.keyboard) ctx.keyboard = [...defaultKeyboard];
   if (!ctx.params) ctx.params = {};
   await next();
 };

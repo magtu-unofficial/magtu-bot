@@ -5,7 +5,6 @@ import ArgsCommand from "../lib/argsCommand";
 import { color, platform } from "../lib/bot";
 import Timetable, { Ipair, Esubgroup } from "../models/timetable";
 import dateTemplate from "../templates/date";
-import defaultKeyboard from "../templates/defaultKeyboard";
 import numberToEmoji from "../templates/numberToEmoji";
 import {
   firstSubgroup,
@@ -115,7 +114,6 @@ export default new ArgsCommand(
         }
       }
 
-      ctx.keyboard = [...defaultKeyboard];
       ctx.keyboard.push([
         {
           label: `${group}${timetableButtonToday}`,
