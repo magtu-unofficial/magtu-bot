@@ -29,6 +29,7 @@ import {
 } from "./utils/config";
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
+import donate from "./commands/donate";
 
 const app = new Koa();
 app.use(bodyParser());
@@ -37,7 +38,7 @@ const router = new Router(ctx => {
   ctx.response = cmdNotFound;
 });
 
-router.add(timetable, teacher, notify, report, help);
+router.add(timetable, teacher, notify, report, help, donate);
 
 middlewares.push(router.middleware());
 

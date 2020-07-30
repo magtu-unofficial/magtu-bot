@@ -15,7 +15,6 @@ export default async (ctx: Ictx, next: Next) => {
       ctx.args[0] = "завтра";
     }
     ctx.text = "timetable";
-    ч;
     ctx.args[1] = ctx.session.lastQuery.group;
     ctx.args[2] = ctx.session.lastQuery.subgroup;
   }

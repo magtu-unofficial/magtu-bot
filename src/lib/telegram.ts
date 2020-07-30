@@ -30,10 +30,13 @@ const sendMessageParams = (
     }))
   );
 
+  const kek = message.replace(/[-.+?^$[\](){}\\!]/g, "\\$&");
+
   return {
     chat_id: chat,
-    text: message,
+    text: kek,
     disable_web_page_preview: true,
+    parse_mode: "MarkdownV2",
     reply_markup: {
       resize_keyboard: true,
       one_time_keyboard: false,
@@ -52,7 +55,6 @@ class Telegram extends Bot {
   koaMiddleware() {
     const callback = this.getCallback();
 
-    // FIXME добавить токен
     this.api("setWebhook", {
       url: `${this.config.url}/${this.config.token}`,
       allowed_updates: ["message", "inline_query"]
@@ -73,6 +75,7 @@ class Telegram extends Bot {
           botCtx.keyboard,
           botCtx.params
         );
+        console.log(JSON.stringify(ctx.body));
         ctx.body.method = "sendMessage";
       }
       await next();

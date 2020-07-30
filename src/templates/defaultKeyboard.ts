@@ -1,4 +1,11 @@
-import { timetableKey, teacherKey, notifyKey, helpKey } from "../text";
+import {
+  timetableKey,
+  teacherKey,
+  notifyKey,
+  helpKey,
+  reportKey,
+  donateKey
+} from "../text";
 
 import { Ikeyboard, color } from "../lib/bot";
 
@@ -10,6 +17,10 @@ const keyboard: Array<Array<Ikeyboard>> = [
   [
     { label: notifyKey, color: color.default },
     { label: helpKey, color: color.default }
+  ],
+  [
+    { label: reportKey, color: color.default },
+    { label: donateKey, color: color.default }
   ]
 ];
 

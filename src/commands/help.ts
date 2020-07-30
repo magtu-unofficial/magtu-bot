@@ -1,7 +1,11 @@
-import { Ictx } from "../lib/bot";
+import { Ictx, platform } from "../lib/bot";
 import Command from "../lib/command";
-import { helpAnswer, helpCmd } from "../text";
+import { helpAnswer, helpTgAnswer, helpCmd } from "../text";
 
 export default new Command(helpCmd, (ctx: Ictx) => {
-  ctx.response = helpAnswer;
+  if (ctx.platform === platform.telegram) {
+    ctx.response = helpTgAnswer;
+  } else {
+    ctx.response = helpAnswer;
+  }
 });
