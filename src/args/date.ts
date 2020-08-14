@@ -15,14 +15,14 @@ export const parser = (str: string, from: Date = new Date()): Date | string => {
   currentDate.setMilliseconds(0);
 
   // Обработка даты типа 01.02.2019
-  const numbers: Array<number> = str
-    .split(/\.|-|\//)
-    .map(val => parseInt(val, 10));
+  const splitedString: Array<string> = str.split(/[.-/ ]/);
+  const numbers: Array<number> = splitedString.map(val => parseInt(val, 10));
 
   if (
-    numbers.length > 1 &&
-    numbers.length <= 3 &&
-    numbers.findIndex(val => isNaN(val)) === -1
+    (numbers.length === 2 || numbers.length === 3) &&
+    numbers.findIndex(val => isNaN(val) || val === 0) === -1 &&
+    splitedString[0].length <= 2 &&
+    splitedString[1].length <= 2
   ) {
     const year = numbers[2] || currentDate.getFullYear();
     return new Date(

@@ -45,6 +45,7 @@ test("должен парсить аргументы с пробелом", () =>
       }
     ],
     ctx => {
+      // FIXME
       expect(ctx.session.args[0]).toBe(22);
       expect(ctx.session.args[1]).toBe("FFFFFF WAT");
     },
