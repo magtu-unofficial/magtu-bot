@@ -19,10 +19,7 @@ const defaultKeyboard: Array<Array<Ikeyboard>> = [
     { label: notifyKey, color: color.default },
     { label: helpKey, color: color.default }
   ],
-  [
-    { label: reportKey, color: color.default },
-    { label: donateKey, color: color.default }
-  ]
+  [{ label: reportKey, color: color.default }]
 ];
 
 export default async (ctx: Ictx, next: Next) => {
