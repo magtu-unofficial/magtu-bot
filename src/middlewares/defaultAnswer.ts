@@ -1,7 +1,6 @@
 import { Next } from "koa";
 import { color, Ictx, Ikeyboard } from "../lib/bot";
 import {
-  donateKey,
   helpKey,
   notifyKey,
   reportKey,
