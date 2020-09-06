@@ -72,6 +72,7 @@ export default new ArgsCommand(
     const emoji = ctx.platform !== platform.viber;
 
     try {
+      let groupDisplayName: string;
       if (typeof date === "string") {
         const from = new Date();
         from.setDate(from.getDate() - 1);
@@ -87,6 +88,8 @@ export default new ArgsCommand(
         let answer = "";
         if (days.length !== 0) {
           for (const day of days) {
+            groupDisplayName = day.displayName;
+
             answer += `${timetableTemplate(
               day.date,
               day.displayName,
@@ -102,6 +105,8 @@ export default new ArgsCommand(
       } else {
         const day = await Timetable.findOne({ date, group });
         if (day) {
+          groupDisplayName = day.displayName;
+
           ctx.response = timetableTemplate(
             day.date,
             day.displayName,
@@ -116,11 +121,11 @@ export default new ArgsCommand(
 
       ctx.keyboard.push([
         {
-          label: `${group}${timetableButtonToday}`,
+          label: `${groupDisplayName}${timetableButtonToday}`,
           color: color.default
         },
         {
-          label: `${group}${timetableButtonTomorrow}`,
+          label: `${groupDisplayName}${timetableButtonTomorrow}`,
           color: color.default
         }
       ]);
