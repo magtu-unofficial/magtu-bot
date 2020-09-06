@@ -60,7 +60,6 @@ class Vk extends Bot {
         ctx.request.body.secret === this.config.secret
       ) {
         if (ctx.request.body.type === "message_new") {
-          // TODO: trycatch
           try {
             if (isOurMessage(ctx.request.body)) {
               await callback(this.createCtx(ctx.request.body));
@@ -70,6 +69,8 @@ class Vk extends Bot {
             log.error(error);
             throw error;
           }
+        } else if (ctx.request.body.type === "confirmation") {
+          ctx.body = this.config.confirm;
         }
       }
       await next();
