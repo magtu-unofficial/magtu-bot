@@ -1,4 +1,4 @@
-import { parser } from "./group";
+import { normalize as parser } from "./group";
 
 describe("Проверка группы", () => {
   test("Все правильно", () => {

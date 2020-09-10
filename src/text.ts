@@ -46,7 +46,9 @@ export const dateArg = {
 export const groupArg = {
   query: `Укажите группу`,
   error: `❌Группа указана неверно. Укажите группу со всеми " - ", как в файле замен на портале.
-Например ДаК-18-1`
+Например ДаК-18-1`,
+  notFound:
+    "❌Такая группа не найдена. Проверьте правильность написания названия группы"
 };
 
 export const boolArg = {
@@ -105,7 +107,7 @@ export const teacherCmd = /Препод|tea/i;
 export const timetableForTeacher = (date: string, teacher: string) =>
   `Расписание преподавателя ${teacher} на ${date}`;
 export const teacherFio =
-  "❌С такой фамилией несколько преподавателей. Укажите фамилию с инициалами";
+  "❌С такой фамилией несколько преподавателей. Укажите фамилию с инициалами\nВозможно вы имели в виду:";
 
 export const notifyKey = "Уведомления";
 export const notifyCmd = /уведомл|notify/i;
