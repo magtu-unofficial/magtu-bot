@@ -26,7 +26,7 @@ const parser = async (str: string): Promise<string> => {
     { $unwind: "$pairs" },
     { $project: { teacher: "$pairs.teacher" } },
     { $match: { teacher: normRegExp } },
-    { $sortByCount: "$teacher" },
+    { $sortByCount: { $trim: { input: "$teacher" } } },
     { $project: { _id: false, teacher: "$_id" } }
   ]);
 
