@@ -2,6 +2,7 @@ import Koa from "koa";
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
+import { vkOldClient } from "../text";
 import log from "../utils/log";
 import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 
@@ -45,6 +46,18 @@ class Vk extends Bot {
   koaMiddleware() {
     this.use(async (ctx, next) => {
       await next();
+
+      if (!ctx.clientInfo.keyboard) {
+        const flat: Array<Ikeyboard> = [];
+
+        for (const line of ctx.keyboard) {
+          flat.push(...line);
+        }
+        ctx.response = flat.reduce(
+          (acc, current) => `${acc}\n- ${current.label}`,
+          ctx.response + vkOldClient
+        );
+      }
 
       this.sendMessage(ctx.chat, ctx.response, ctx.keyboard, {
         oneTime: ctx.isChat
