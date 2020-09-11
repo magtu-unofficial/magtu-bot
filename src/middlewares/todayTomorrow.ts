@@ -1,6 +1,6 @@
 import { Next } from "koa";
 import { Ictx } from "../lib/bot";
-
+import log from "../utils/log";
 import {
   timetableButtonToday,
   timetableButtonTomorrow,
@@ -10,10 +10,14 @@ import {
 
 // Костыль?
 export default async (ctx: Ictx, next: Next) => {
-  if (ctx.text.indexOf(timetableButtonToday) !== -1) {
-    ctx.text = `${timetableKey} ${dateArg.todayKey} ${ctx.session.lastQuery.group} ${ctx.session.lastQuery.subgroup}`;
-  } else if (ctx.text.indexOf(timetableButtonTomorrow) !== -1) {
-    ctx.text = `${timetableKey} ${dateArg.tomorrowKey} ${ctx.session.lastQuery.group} ${ctx.session.lastQuery.subgroup}`;
+  try {
+    if (ctx.text.indexOf(timetableButtonToday) !== -1) {
+      ctx.text = `${timetableKey} ${dateArg.todayKey} ${ctx.session.lastQuery.group} ${ctx.session.lastQuery.subgroup}`;
+    } else if (ctx.text.indexOf(timetableButtonTomorrow) !== -1) {
+      ctx.text = `${timetableKey} ${dateArg.tomorrowKey} ${ctx.session.lastQuery.group} ${ctx.session.lastQuery.subgroup}`;
+    }
+  } catch (error) {
+    log.warn("Ошибка с быстрыми кнопками");
   }
 
   await next();

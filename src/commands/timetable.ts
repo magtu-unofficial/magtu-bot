@@ -138,11 +138,11 @@ export default new ArgsCommand(
         subgroup
       };
 
-      try {
-        const ad = await fs.readFile("./ad.txt");
-        ctx.response += `\n\n${ad}`;
-      } catch (error) {
-        log.warn(error);
+      if (ctx.platform !== platform.viber) {
+        try {
+          const ad = await fs.readFile("./ad.txt");
+          ctx.response += `\n\n${ad}`;
+        } catch (error) {}
       }
     } catch (error) {
       if (error.message === "Not found") {
