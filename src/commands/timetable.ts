@@ -142,7 +142,9 @@ export default new ArgsCommand(
         try {
           const ad = await fs.readFile("./ad.txt");
           ctx.response += `\n\n${ad}`;
-        } catch (error) {}
+        } catch (e) {
+          log.debug(e);
+        }
       }
     } catch (error) {
       if (error.message === "Not found") {
