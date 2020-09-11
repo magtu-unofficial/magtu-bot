@@ -1,18 +1,18 @@
 import { boolArg } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
-export const parser = (str: string): boolean | undefined => {
+export const parser = (str: string): boolean => {
   if (str.search(/вкл|да|on|true|1/i) !== -1) {
     return true;
   }
   if (str.search(/выкл|нет|off|false|0/i) !== -1) {
     return false;
   }
-  return undefined;
+  throw Error(boolArg.error);
 };
 
 export default {
-  ...boolArg,
+  query: boolArg.query,
   keyboard: [
     [
       { label: boolArg.trueKey, color: color.positive },

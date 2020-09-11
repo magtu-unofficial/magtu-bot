@@ -1,15 +1,10 @@
+import { Next } from "koa";
+import { Ictx } from "../lib/bot";
+
 import user from "../models/user";
 
-const getSessionKey = (ctx): number => {
-  const userId = ctx.message.peer_id || ctx.message.from_id;
-
-  return userId;
-};
-
-export default async (ctx, next) => {
-  const key = getSessionKey(ctx);
-
-  ctx.session = await user.get(key);
+export default async (ctx: Ictx, next: Next) => {
+  ctx.session = await user.get(ctx.chat || ctx.user, ctx.platform);
   await next();
-  await user.set(key, ctx.session);
+  await user.set(ctx.chat || ctx.user, ctx.platform, ctx.session);
 };

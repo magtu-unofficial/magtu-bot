@@ -1,19 +1,17 @@
-import Command from "./command";
 import reportText from "../args/reportText";
+import Command from "../lib/argsCommand";
+import { reportCmd, reportthanks } from "../text";
 import sendAdmin from "../utils/sendAdmin";
-import { reportthanks, reportCmd } from "../text";
 
-const cmd = new Command("report", reportCmd, [reportText], async ctx => {
+export default new Command(reportCmd, [reportText], async ctx => {
   ctx.session.lastReport = new Date();
-  await ctx.send(reportthanks);
+  ctx.response = reportthanks;
   await sendAdmin(
-    ctx.bot,
-    `report https://vk.com/id${ctx.message.peer_id} ${Date().toString()}
+    `*report ${ctx.platform} ${ctx.chat}*
+${ctx.text}
 
-    ${ctx.session.args[0]}
-  
-    ${JSON.stringify(ctx.session)}`
+\`\`\`
+${JSON.stringify(ctx.session, null, 2)}
+\`\`\``
   );
 });
-
-export default cmd;

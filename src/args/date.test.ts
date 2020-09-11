@@ -9,7 +9,11 @@ describe("Дата цифами", () => {
     expect(parser("02.03.2019")).toEqual(new Date(2019, 2, 2));
   });
 
-  test("01.23", () => {
+  test("01 23 19", () => {
+    expect(parser("02 03 2019")).toEqual(new Date(2019, 2, 2));
+  });
+
+  test("01.03", () => {
     expect(parser("02.03", new Date(2018, 1, 1))).toEqual(new Date(2018, 2, 2));
   });
 });
@@ -106,7 +110,15 @@ describe("Относительные слова", () => {
 
 describe("Неверные строки", () => {
   test("бред", () => {
-    expect(parser("бред")).toBeUndefined();
+    expect(() => {
+      parser("бред");
+    }).toThrow("Дата введена не верно.");
+  });
+
+  test("070.7", () => {
+    expect(() => {
+      parser("070.7");
+    }).toThrow("Дата введена не верно.");
   });
 });
 

@@ -1,7 +1,18 @@
+import { Next } from "koa";
+import { Ictx } from "../lib/bot";
+
 import log from "../utils/log";
 
-export default (ctx: any, next: any) => {
-  const { peer_id: peerId, text } = ctx.message;
-  log.info(`${peerId}: ${text}`);
-  next();
+export default async (ctx: Ictx, next: Next) => {
+  const time = Date.now();
+  await next();
+  log.info(
+    `[${ctx.platform}] ${ctx.name ? `${ctx.name} (${ctx.chat})` : ctx.chat} ${
+      Date.now() - time
+    }ms: ${ctx.text} - ${
+      !ctx.response || ctx.response.length < 20
+        ? ctx.response
+        : `${ctx.response.substr(0, 30)}...`
+    }`
+  );
 };

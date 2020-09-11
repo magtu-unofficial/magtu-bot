@@ -1,47 +1,98 @@
-import Express from "express";
-import bodyParser from "body-parser";
-import Bot from "node-vk-bot-api";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
 
-import { port, confirm, token, secret, notifySecret } from "./utils/config";
+import help from "./commands/help";
+import notify from "./commands/notify";
+import report from "./commands/report";
+import teacher from "./commands/teacher";
+import timetable from "./commands/timetable";
+import { platform } from "./lib/bot";
+import Router from "./lib/router";
+import Vk from "./lib/vk";
+import Telegram from "./lib/telegram";
+import Viber from "./lib/viber";
 import middlewares from "./middlewares";
-import commands from "./commands";
-import log from "./utils/log";
-import { cmdNotFound, newChanges } from "./text";
 import User from "./models/user";
-import sendMany from "./utils/sendMany";
+import { cmdNotFound, newChanges } from "./text";
+import {
+  vkToken,
+  vkSecret,
+  vkConfirm,
+  vkPath,
+  tgToken,
+  tgUrl,
+  tgPath,
+  viberToken,
+  viberUrl,
+  viberPath,
+  port,
+  notifySecret
+} from "./utils/config";
+import log from "./utils/log";
+import mongoose from "./utils/mongoose";
+import donate from "./commands/donate";
+import sendAdmin from "./utils/sendAdmin";
 
-const app = Express();
-const bot = new Bot({
-  confirmation: confirm,
-  token,
-  secret
+const app = new Koa();
+app.use(bodyParser());
+
+const router = new Router(ctx => {
+  ctx.response = cmdNotFound;
+  sendAdmin(`*NF ${ctx.platform} ${ctx.user}*
+${ctx.text}
+
+\`\`\`
+${JSON.stringify(ctx.message, null, 2)}
+\`\`\``);
 });
 
-middlewares(bot);
-commands(bot);
+router.add(timetable, teacher, notify, report, help, donate);
 
-bot.on(async ctx => {
-  ctx.send(cmdNotFound);
+middlewares.push(router.middleware());
+
+const vk = new Vk({
+  confirm: vkConfirm,
+  token: vkToken,
+  secret: vkSecret,
+  path: vkPath
 });
+vk.use(...middlewares);
+app.use(vk.koaMiddleware());
+log.info("VK done");
 
-app.use(bodyParser.json());
+const telegram = new Telegram({ token: tgToken, url: tgUrl, path: tgPath });
+telegram.use(...middlewares);
+app.use(telegram.koaMiddleware());
 
-app.post("/", bot.webhookCallback);
+const viber = new Viber({ token: viberToken, url: viberUrl, path: viberPath });
+viber.use(...middlewares);
+app.use(viber.koaMiddleware());
 
-app.get("/", (req, res) => {
-  res.send("ok");
-});
+app.use(async ctx => {
+  if (
+    ctx.method === "GET" &&
+    ctx.path === "/notify" &&
+    ctx.query.secret === notifySecret
+  ) {
+    const vkList = await User.getNotifyList(platform.vk);
+    vk.sendMessages(vkList, newChanges);
 
-app.get("/notify", async (req, res) => {
-  if (req.query.secret === notifySecret) {
-    res.send("ok");
-    const list = await User.getNotifyList();
-    await sendMany(bot, list, `${newChanges} ${req.query.text || ""}`);
-  } else {
-    res.send("Wrong secret");
+    const tgList = await User.getNotifyList(platform.telegram);
+    telegram.sendMessages(tgList, newChanges);
+
+    const viberList = await User.getNotifyList(platform.viber);
+    viber.sendMessages(viberList, newChanges);
+    ctx.body = "ok";
   }
 });
 
+app.use(ctx => {
+  if (ctx.method === "GET") {
+    ctx.body = "Че ты тут забыл?";
+  }
+});
+
+log.debug(mongoose.version);
 app.listen(port, () => {
   log.info(`Бот запущен на порту ${port}`);
 });

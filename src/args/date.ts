@@ -1,10 +1,7 @@
 import { dateArg, cancelKey } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
-export const parser = (
-  str: string,
-  from: Date = new Date()
-): Date | string | undefined => {
+export const parser = (str: string, from: Date = new Date()): Date | string => {
   if (str.search(/Вс(ё|е)|all/i) !== -1) {
     return "all";
   }
@@ -18,14 +15,14 @@ export const parser = (
   currentDate.setMilliseconds(0);
 
   // Обработка даты типа 01.02.2019
-  const numbers: Array<number> = str
-    .split(/\.|-|\//)
-    .map(val => parseInt(val, 10));
+  const splitedString: Array<string> = str.split(/[.-/ ]/);
+  const numbers: Array<number> = splitedString.map(val => parseInt(val, 10));
 
   if (
-    numbers.length > 1 &&
-    numbers.length <= 3 &&
-    numbers.findIndex(val => isNaN(val)) === -1
+    (numbers.length === 2 || numbers.length === 3) &&
+    numbers.findIndex(val => isNaN(val) || val === 0) === -1 &&
+    splitedString[0].length <= 2 &&
+    splitedString[1].length <= 2
   ) {
     const year = numbers[2] || currentDate.getFullYear();
     return new Date(
@@ -36,46 +33,43 @@ export const parser = (
   }
 
   // Обработка дней недели
-  for (const key in dateArg.daysWeekRegExp) {
-    if ({}.hasOwnProperty.call(dateArg.daysWeekRegExp, key)) {
-      const element = dateArg.daysWeekRegExp[key];
-      const day = parseInt(key, 10);
-      if (str.search(element) === 0) {
-        const date = new Date(currentDate);
+  for (const i of dateArg.daysWeekRegExp) {
+    if (str.search(i.regexp) === 0) {
+      const date = new Date(currentDate);
 
-        // День на текущей или следующей неделе
-        if (day - currentDate.getDay() >= 0) {
-          // Разность текущего и необходимого дня прибавляется к
-          date.setDate(currentDate.getDate() + day - currentDate.getDay());
-        } else {
-          date.setDate(currentDate.getDate() + 7 - currentDate.getDay() + day);
-        }
-
-        return date;
+      // День на текущей или следующей неделе
+      if (i.day - currentDate.getDay() >= 0) {
+        // Разность текущего и необходимого дня прибавляется к
+        date.setDate(currentDate.getDate() + i.day - currentDate.getDay());
+      } else {
+        date.setDate(currentDate.getDate() + 7 - currentDate.getDay() + i.day);
       }
+
+      return date;
     }
   }
 
   // Обработка относительных дат
-  for (const key in dateArg.daysRelativeRegExp) {
-    if ({}.hasOwnProperty.call(dateArg.daysRelativeRegExp, key)) {
-      const element = dateArg.daysRelativeRegExp[key];
-      const day = parseInt(key, 10);
-      if (str.search(element) === 0) {
-        const date = new Date(currentDate);
+  for (const i of dateArg.daysRelativeRegExp) {
+    if (str.search(i.regexp) === 0) {
+      const date = new Date(currentDate);
 
-        date.setDate(currentDate.getDate() + day);
+      date.setDate(currentDate.getDate() + i.day);
 
-        return date;
-      }
+      return date;
     }
   }
 
-  return undefined;
+  // Вывод справки
+  if (str === dateArg.another) {
+    throw Error(dateArg.anotherText);
+  }
+
+  throw Error(dateArg.error);
 };
 
 export default {
-  ...dateArg,
+  query: dateArg.query,
   keyboard: [
     [
       { label: dateArg.allKey, color: color.default },

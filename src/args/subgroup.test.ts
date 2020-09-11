@@ -23,19 +23,27 @@ describe("Проверка подгруппы", () => {
 
   describe("Неверная подгруппа", () => {
     test("3", () => {
-      expect(parser("3")).toBe(undefined);
+      expect(() => {
+        parser("3");
+      }).toThrow();
     });
 
     test("0", () => {
-      expect(parser("0")).toBe(undefined);
+      expect(() => {
+        parser("0");
+      }).toThrow();
     });
 
     test("-1", () => {
-      expect(parser("-1")).toBe(undefined);
+      expect(() => {
+        parser("-1");
+      }).toThrow();
     });
 
     test("Бред", () => {
-      expect(parser("Бред")).toBe(undefined);
+      expect(() => {
+        parser("Бред");
+      }).toThrow();
     });
   });
 });

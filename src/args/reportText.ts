@@ -1,5 +1,5 @@
 import { reportTextArg, cancelKey } from "../text";
-import { color } from "../interfaces/keyboard";
+import { color } from "../lib/bot";
 
 const parser = (str: String) => str;
 
