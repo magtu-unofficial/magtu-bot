@@ -1,3 +1,5 @@
+import { promises as fs } from "fs";
+
 import dateArg from "../args/date";
 import groupArg from "../args/group";
 import subgroupArg from "../args/subgroup";
@@ -16,6 +18,7 @@ import {
   timetableForGroup,
   timetableNotFound
 } from "../text";
+import log from "../utils/log";
 
 export const timetableTemplate = (
   date: Date,
@@ -134,6 +137,13 @@ export default new ArgsCommand(
         group,
         subgroup
       };
+
+      try {
+        const ad = await fs.readFile("./ad.txt");
+        ctx.response += `\n\n${ad}`;
+      } catch (error) {
+        log.warn(error);
+      }
     } catch (error) {
       if (error.message === "Not found") {
         ctx.response = timetableNotFound(dateTemplate(date));
