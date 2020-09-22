@@ -141,7 +141,7 @@ export default new ArgsCommand(
       if (ctx.platform !== platform.viber) {
         try {
           const year = group.match(/-(\d+)-/)[1];
-          const ad = await fs.readFile(`./ad/${year}.txt`);
+          const ad = await fs.readFile(`./ad/${ctx.platform}/${year}.txt`);
           ctx.response += `\n\n${ad}`;
         } catch (e) {
           log.debug(e);
