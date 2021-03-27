@@ -1,6 +1,7 @@
 import { Next } from "koa";
 import { color, Ictx, Ikeyboard } from "../lib/bot";
 import {
+  donateKey,
   helpKey,
   notifyKey,
   reportKey,
@@ -18,7 +19,10 @@ const defaultKeyboard: Array<Array<Ikeyboard>> = [
     { label: notifyKey, color: color.default },
     { label: helpKey, color: color.default }
   ],
-  [{ label: reportKey, color: color.default }]
+  [
+    { label: reportKey, color: color.default },
+    { label: donateKey, color: color.default }
+  ]
 ];
 
 export default async (ctx: Ictx, next: Next) => {
