@@ -38,7 +38,7 @@ app.use(bodyParser());
 
 const router = new Router(ctx => {
   ctx.response = cmdNotFound;
-  sendAdmin(`*NF ${ctx.platform} ${ctx.user}*
+  // sendAdmin(`*NF ${ctx.platform} ${ctx.user}*
 ${ctx.text}
 
 \`\`\`
