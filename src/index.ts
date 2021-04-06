@@ -31,6 +31,7 @@ import {
 import log from "./utils/log";
 import mongoose from "./utils/mongoose";
 import donate from "./commands/donate";
+import classroom from "./commands/classroom";
 // import sendAdmin from "./utils/sendAdmin";
 
 const app = new Koa();
@@ -46,7 +47,7 @@ const router = new Router(ctx => {
   // \`\`\``);
 });
 
-router.add(timetable, teacher, notify, report, help, donate);
+router.add(timetable, teacher, classroom, notify, report, help, donate);
 
 middlewares.push(router.middleware());
 
