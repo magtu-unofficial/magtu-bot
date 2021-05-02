@@ -1,6 +1,7 @@
 import { Next } from "koa";
 import { color, Ictx, Ikeyboard } from "../lib/bot";
 import {
+  classroomKey,
   donateKey,
   helpKey,
   notifyKey,
@@ -16,10 +17,11 @@ const defaultKeyboard: Array<Array<Ikeyboard>> = [
     { label: teacherKey, color: color.default }
   ],
   [
-    { label: notifyKey, color: color.default },
-    { label: helpKey, color: color.default }
+    { label: classroomKey, color: color.default },
+    { label: notifyKey, color: color.default }
   ],
   [
+    { label: helpKey, color: color.default },
     { label: reportKey, color: color.default },
     { label: donateKey, color: color.default }
   ]
