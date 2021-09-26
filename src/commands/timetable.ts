@@ -53,7 +53,7 @@ export const timetableTemplate = (
       if (pair.removed) {
         answer += ` ${pairCanceled}`;
       } else if (pair.error) {
-        answer += `❓ ${pair.string.replace(/\r?\n/g, "")}`;
+        answer += `❓ ${pair.string ? pair.string.replace(/\r?\n/g, "") : ""}`;
       } else {
         answer += ` ${pair.name}${pair.teacher ? ` 🎓${pair.teacher}` : ""}${
           pair.classroom ? ` 🚪${pair.classroom}` : ""
