@@ -1,4 +1,4 @@
-import Bot, { platform } from "./bot";
+import Bot, { platform } from "../../lib/bot";
 
 describe("Базовый класс бота", () => {
   test("Middleware должны выполняться", async () => {

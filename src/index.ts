@@ -13,7 +13,7 @@ import Telegram from "./lib/telegram";
 import Viber from "./lib/viber";
 import middlewares from "./middlewares";
 import User from "./models/user";
-import { cmdNotFound, newChanges } from "./text";
+import { cmdNotFound } from "./text";
 import {
   vkToken,
   vkSecret,
@@ -75,14 +75,18 @@ app.use(async ctx => {
     ctx.path === "/notify" &&
     ctx.query.secret === notifySecret
   ) {
-    const vkList = await User.getNotifyList(platform.vk);
-    vk.sendMessages(vkList, newChanges);
+    User.getNotifyList(platform.vk).then(vkList => {
+      vk.sendMessages(vkList).then(() => {
+        User.getNotifyList(platform.telegram).then(tgList => {
+          telegram.sendMessages(tgList).then(() => {
+            User.getNotifyList(platform.viber).then(viberList => {
+              viber.sendMessages(viberList);
+            });
+          });
+        });
+      });
+    });
 
-    const tgList = await User.getNotifyList(platform.telegram);
-    telegram.sendMessages(tgList, newChanges);
-
-    const viberList = await User.getNotifyList(platform.viber);
-    viber.sendMessages(viberList, newChanges);
     ctx.body = "ok";
   }
 });

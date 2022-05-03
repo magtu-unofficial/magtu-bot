@@ -1,7 +1,7 @@
-import Command from "./command";
-import ArgsCommand from "./argsCommand";
-import Router from "./router";
-import { Ictx, platform } from "./bot";
+import Command from "../../lib/command";
+import ArgsCommand from "../../lib/argsCommand";
+import Router from "../../lib/router";
+import { Ictx, platform } from "../../lib/bot";
 
 test("должен присваисвать id командам", () => {
   const router = new Router(() => {});

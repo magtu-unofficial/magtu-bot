@@ -1,4 +1,4 @@
-import Command from "./command";
+import Command from "../../lib/command";
 
 test("должен проверять по регекспу", () => {
   const cmd = new Command(/test/, () => {});

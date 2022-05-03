@@ -1,4 +1,4 @@
-import { parser } from "./subgroup";
+import { parser } from "../../args/subgroup";
 
 describe("Проверка подгруппы", () => {
   describe("Первая подгруппа", () => {

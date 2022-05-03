@@ -4,7 +4,7 @@ import dateArg from "../args/date";
 import groupArg from "../args/group";
 import subgroupArg from "../args/subgroup";
 import ArgsCommand from "../lib/argsCommand";
-import { color, platform } from "../lib/bot";
+import { color, Ictx, platform } from "../lib/bot";
 import Timetable, { Ipair, Esubgroup } from "../models/timetable";
 import dateTemplate from "../templates/date";
 import numberToEmoji from "../templates/numberToEmoji";
@@ -19,6 +19,7 @@ import {
   timetableNotFound
 } from "../text";
 import log from "../utils/log";
+import timetable from "../models/timetable";
 
 export const timetableTemplate = (
   date: Date,
@@ -65,6 +66,36 @@ export const timetableTemplate = (
   return answer;
 };
 
+export async function getAllAvailableTimetables(
+  group: string,
+  subgroup: Esubgroup,
+  userPlatform: string
+) {
+  const from = new Date();
+  from.setDate(from.getDate() - 1);
+  const to = new Date();
+  to.setDate(to.getDate() + 7);
+
+  const days = await Timetable.find({
+    date: { $gte: from, $lt: to },
+    group
+  });
+
+  let answer = "";
+  if (days.length !== 0) {
+    for (const day of days) {
+      answer += `${timetableTemplate(
+        day.date,
+        day.displayName,
+        day.pairs,
+        subgroup,
+        userPlatform !== platform.viber
+      )}\n\n`;
+    }
+  }
+  return answer;
+}
+
 export default new ArgsCommand(
   timetableCmd,
   [dateArg, groupArg, subgroupArg],
@@ -74,9 +105,15 @@ export default new ArgsCommand(
     const subgroup: Esubgroup = ctx.session.args[2];
     const emoji = ctx.platform !== platform.viber;
 
+    let groupDisplayName: string;
     try {
-      let groupDisplayName: string;
       if (typeof date === "string") {
+        ctx.response = await getAllAvailableTimetables(
+          group,
+          subgroup,
+          ctx.platform
+        );
+
         const from = new Date();
         from.setDate(from.getDate() - 1);
 
@@ -122,17 +159,6 @@ export default new ArgsCommand(
         }
       }
 
-      ctx.keyboard.push([
-        {
-          label: `${groupDisplayName}${timetableButtonToday}`,
-          color: color.default
-        },
-        {
-          label: `${groupDisplayName}${timetableButtonTomorrow}`,
-          color: color.default
-        }
-      ]);
-
       ctx.session.lastQuery = {
         group,
         subgroup
@@ -151,6 +177,22 @@ export default new ArgsCommand(
       if (error.message === "Not found") {
         ctx.response = timetableNotFound(dateTemplate(date));
       }
+    } finally {
+      if (!groupDisplayName) {
+        const day = await Timetable.findOne({ group });
+        groupDisplayName = day.displayName;
+      }
+
+      ctx.keyboard.push([
+        {
+          label: `${groupDisplayName}${timetableButtonToday}`,
+          color: color.default
+        },
+        {
+          label: `${groupDisplayName}${timetableButtonTomorrow}`,
+          color: color.default
+        }
+      ]);
     }
   }
 );

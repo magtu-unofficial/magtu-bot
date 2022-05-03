@@ -1,5 +1,5 @@
-import ArgsCommand from "./argsCommand";
-import { platform } from "./bot";
+import ArgsCommand from "../../lib/argsCommand";
+import { platform } from "../../lib/bot";
 
 test("должен парсить аргументы без проблела", () => {
   const cmd = new ArgsCommand(

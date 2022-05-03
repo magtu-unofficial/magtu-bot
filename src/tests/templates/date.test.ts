@@ -1,4 +1,4 @@
-import date from "./date";
+import date from "../../templates/date";
 
 test("Понедельник 25.02.2019", () => {
   expect(date(new Date(2019, 1, 25))).toBe("понедельник 25.02.2019");

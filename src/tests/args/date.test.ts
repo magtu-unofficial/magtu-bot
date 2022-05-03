@@ -1,4 +1,4 @@
-import { parser } from "./date";
+import { parser } from "../../args/date";
 
 describe("Дата цифами", () => {
   test("01.23.2019", () => {

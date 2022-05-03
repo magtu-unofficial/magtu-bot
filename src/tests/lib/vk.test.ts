@@ -1,4 +1,4 @@
-import Vk, { isOurMessage } from "./vk";
+import Vk, { isOurMessage } from "../../lib/vk";
 
 jest.mock("node-fetch");
 

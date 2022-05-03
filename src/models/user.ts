@@ -43,12 +43,12 @@ user.statics.setNotify = async function setNotify(
 user.statics.getNotifyList = async function getNotifyList(platform: Eplatform) {
   const doc = await this.find(
     { platform, notify: { $eq: true } },
-    { id: true }
+    { id: true, data: true }
   );
-  return doc.map((u: IuserDocument) => u.id);
+  return doc.map((u: IuserDocument) => u);
 };
 
-interface IuserDocument extends mongoose.Document {
+export interface IuserDocument extends mongoose.Document {
   id: string;
   platform: Eplatform;
   data: any;
@@ -58,7 +58,7 @@ interface IuserModel extends mongoose.Model<IuserDocument> {
   get(id: string, platform: Eplatform): Promise<any>;
   set(id: string, platform: Eplatform, data: any): Promise<void>;
   setNotify(id: string, platform: Eplatform, enable: boolean): Promise<void>;
-  getNotifyList(platform: Eplatform): Promise<Array<string>>;
+  getNotifyList(platform: Eplatform): Promise<Array<IuserDocument>>;
 }
 
 const model: IuserModel = mongoose.model<IuserDocument, IuserModel>(

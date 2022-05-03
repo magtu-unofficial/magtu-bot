@@ -2,9 +2,11 @@ import Koa from "koa";
 import { URLSearchParams } from "url";
 import fetch from "node-fetch";
 
-import { vkOldClient } from "../text";
+import { newChanges, vkOldClient } from "../text";
 import log from "../utils/log";
 import Bot, { Ictx, Ikeyboard, platform } from "./bot";
+import { IuserDocument } from "../models/user";
+import { getAllAvailableTimetables } from "../commands/timetable";
 
 interface IvkConfig {
   token: string;
@@ -136,16 +138,44 @@ class Vk extends Bot {
     });
   }
 
-  async sendMessages(users: Array<string>, msg: string) {
-    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-      const chunk = users.slice(i, i + CHUNK_SIZE).join(",");
+  async sendMessages(users: Array<IuserDocument>) {
+    const students: { [index: string]: [IuserDocument] } = this.groupUsers(
+      users,
+      1
+    );
 
-      await this.api("messages.send", {
-        user_ids: chunk,
-        message: msg,
-        dont_parse_links: 1,
-        random_id: Date.now()
-      });
+    for (const group of Object.keys(students)) {
+      const studentsBySubgroup: {
+        [index: string]: [IuserDocument];
+      } = this.groupUsers(students[group], 2);
+
+      for (const subgroup of Object.keys(studentsBySubgroup)) {
+        const ids = studentsBySubgroup[subgroup].map(user => user.id);
+        for (
+          let i = 0;
+          i < studentsBySubgroup[subgroup].length;
+          i += CHUNK_SIZE
+        ) {
+          const chunk = ids.slice(i, i + CHUNK_SIZE);
+
+          const resp = await getAllAvailableTimetables(
+            studentsBySubgroup[subgroup][0].data.args[1],
+            studentsBySubgroup[subgroup][0].data.args[2],
+            studentsBySubgroup[subgroup][0].platform
+          );
+
+          await this.api("messages.send", {
+            user_ids: chunk,
+            message: `${newChanges}\n\n${resp}`,
+            dont_parse_links: 1,
+            random_id: Date.now()
+          });
+
+          if (i + CHUNK_SIZE <= users.length) {
+            await new Promise(res => setTimeout(res, 2000));
+          }
+        }
+      }
     }
   }
 
