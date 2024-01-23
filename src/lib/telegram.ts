@@ -36,7 +36,7 @@ const sendMessageParams = (
 
   return {
     chat_id: chat,
-    text: message.replace(/[-.+?^$[\](){}\\!]/g, "\\$&"),
+    text: message.replace(/[-.+?^$[\](){}\\!_]/g, "\\$&"),
     disable_web_page_preview: true,
     parse_mode: "MarkdownV2",
     reply_markup: {
