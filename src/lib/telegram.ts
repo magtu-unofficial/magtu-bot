@@ -6,7 +6,7 @@ import log from "../utils/log";
 import Bot, { Ictx, Ikeyboard, platform } from "./bot";
 import { IuserDocument } from "../models/user";
 import ArgsCommand from "./argsCommand";
-import { getAllAvailableTimetables } from "../commands/timetable";
+// import { getAllAvailableTimetables } from "../commands/timetable";
 import { newChanges } from "../text";
 
 interface ItelegtamConfig {
@@ -127,20 +127,19 @@ class Telegram extends Bot {
   }
 
   async sendMessages(users: Array<IuserDocument>) {
-    for (let i = 0; i < users.length; i += CHUNK_SIZE) {
-      for (let j = i; j < i + CHUNK_SIZE && j < users.length; j += 1) {
-        const resp = await getAllAvailableTimetables(
-          users[j].data.args[1],
-          users[j].data.args[2],
-          users[j].platform
-        );
-
-        await this.sendMessage(users[j].id, `${newChanges}\n\n${resp}`, [[]]);
-      }
-      if (i + CHUNK_SIZE <= users.length) {
-        await new Promise(res => setTimeout(res, 2000));
-      }
-    }
+    // for (let i = 0; i < users.length; i += CHUNK_SIZE) {
+    //   for (let j = i; j < i + CHUNK_SIZE && j < users.length; j += 1) {
+    //     const resp = await getAllAvailableTimetables(
+    //       users[j].data.args[1],
+    //       users[j].data.args[2],
+    //       users[j].platform
+    //     );
+    //     await this.sendMessage(users[j].id, `${newChanges}\n\n${resp}`, [[]]);
+    //   }
+    //   if (i + CHUNK_SIZE <= users.length) {
+    //     await new Promise(res => setTimeout(res, 2000));
+    //   }
+    // }
   }
 
   createCtx = (body: any): ItelegtamCtx => {

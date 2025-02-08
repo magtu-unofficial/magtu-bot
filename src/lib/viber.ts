@@ -5,7 +5,7 @@ import crypto from "crypto";
 import log from "../utils/log";
 
 import Bot, { Ictx, Ikeyboard, platform } from "./bot";
-import { getAllAvailableTimetables } from "../commands/timetable";
+// import { getAllAvailableTimetables } from "../commands/timetable";
 import { IuserDocument } from "../models/user";
 import { newChanges } from "../text";
 
@@ -143,41 +143,36 @@ class Viber extends Bot {
   }
 
   async sendMessages(users: Array<IuserDocument>): Promise<void> {
-    const students: { [index: string]: [IuserDocument] } = this.groupUsers(users, 1);
-
-    for (const group of Object.keys(students)) {
-      const studentsBySubgroup: { [index: string]: [IuserDocument] } = this.groupUsers(students[group], 2);
-
-      for (const subgroup of Object.keys(studentsBySubgroup)) {
-        const ids = studentsBySubgroup[subgroup].map(user => user.id);
-        for (
-          let i = 0;
-          i < studentsBySubgroup[subgroup].length;
-          i += CHUNK_SIZE
-        ) {
-          const chunk = ids.slice(i, i + CHUNK_SIZE);
-
-          const resp = await getAllAvailableTimetables(
-            studentsBySubgroup[subgroup][0].data.args[1],
-            studentsBySubgroup[subgroup][0].data.args[2],
-            studentsBySubgroup[subgroup][0].platform
-          );
-
-          await this.api("broadcast_message", {
-            broadcast_list: chunk,
-            type: "text",
-            sender: {
-              name: this.name
-            },
-            text: `${newChanges}\n\n${resp}`
-          });
-
-          if (i + CHUNK_SIZE <= users.length) {
-            await new Promise(res => setTimeout(res, 2000));
-          }
-        }
-      }
-    }
+    // const students: { [index: string]: [IuserDocument] } = this.groupUsers(users, 1);
+    // for (const group of Object.keys(students)) {
+    //   const studentsBySubgroup: { [index: string]: [IuserDocument] } = this.groupUsers(students[group], 2);
+    //   for (const subgroup of Object.keys(studentsBySubgroup)) {
+    //     const ids = studentsBySubgroup[subgroup].map(user => user.id);
+    //     for (
+    //       let i = 0;
+    //       i < studentsBySubgroup[subgroup].length;
+    //       i += CHUNK_SIZE
+    //     ) {
+    //       const chunk = ids.slice(i, i + CHUNK_SIZE);
+    //       const resp = await getAllAvailableTimetables(
+    //         studentsBySubgroup[subgroup][0].data.args[1],
+    //         studentsBySubgroup[subgroup][0].data.args[2],
+    //         studentsBySubgroup[subgroup][0].platform
+    //       );
+    //       await this.api("broadcast_message", {
+    //         broadcast_list: chunk,
+    //         type: "text",
+    //         sender: {
+    //           name: this.name
+    //         },
+    //         text: `${newChanges}\n\n${resp}`
+    //       });
+    //       if (i + CHUNK_SIZE <= users.length) {
+    //         await new Promise(res => setTimeout(res, 2000));
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   createCtx = (body: any): IviberCtx => {
